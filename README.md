@@ -1,61 +1,95 @@
-# Trabajo Final Integrador — Grupo 111
+<p align=center>
+<img src="./docs/images/logo-light.jpg" width=600>
+</p>
+<p align=center> <strong>Portal de resultados y seguimiento de órdenes para laboratorios de análisis clínicos</strong> </p>
 
-# Proyecto: LabResultados
-Portal de resultados y seguimiento de órdenes para un laboratorio de análisis clínicos.
+<p align=center> <a href="docs/propuesta.md"> Propuesta de Proyecto</a> • <a href="#créditos"> Créditos </p>
 
-## Grupo 111
-* Grela, Ariel
-* Higa, Matías
+<p align=center> <a href="https://www.utn.edu.ar" >
+    <img src="https://img.shields.io/badge/UTN-Universidad%20Tecnológica%20Nacional-0056b3?style=for-the-badge" alt="Universidad Tecnológica Nacional" >
+</a> </p>
 
-**Tutor:** Fonzo, Santiago
+---
 
-**Tecnicatura Universitaria en Programación**
+## 🧾 Descripción
 
-[![UTN](https://img.shields.io/badge/UTN-Universidad_Tecnológica_Nacional-0056b3?style=for-the-badge)](https://www.utn.edu.ar)
+**LabResultados** es un sistema web que permite a los pacientes de un laboratorio de análisis clínicos **consultar el estado de sus estudios y acceder a sus resultados de forma online**.
 
-## Descripción
-LabResultados es un sistema web que permite a los pacientes de un laboratorio de análisis clínicos **consultar el estado de sus estudios y acceder a sus resultados online**, y al personal del laboratorio **registrar órdenes y cargar resultados** de forma centralizada.
+A su vez, permite al personal del laboratorio **registrar órdenes, cargar resultados y gestionar su estado** de manera centralizada.
 
-## Problema
-En los laboratorios chicos/medianos, el paciente no tiene forma de saber si sus estudios ya están listos: llama por teléfono o se acerca sin necesidad, y la recepción se satura con consultas del tipo *"¿ya están mis análisis?"*. La entrega, además, suele ser en papel o por PDF enviado a mano por WhatsApp.
+## ⚠️ Problema
 
-## Solución
-Un portal donde la recepción registra la orden, el bioquímico carga los resultados y actualiza su estado, y el paciente consulta por código de orden / DNI el estado y sus resultados —con los **valores fuera de rango resaltados** y su **historial**—, con aviso por email cuando están listos.
+En laboratorios pequeños y medianos, los pacientes no siempre tienen una forma sencilla de saber si sus estudios ya están disponibles. Esto genera consultas frecuentes por teléfono o presenciales, como *"¿Ya están mis análisis?"*, lo que puede provocar una mayor carga de trabajo en recepción.
 
-## Alcance
-- Registro de órdenes y carga de resultados estructurados (analito, valor, unidad, rango).
-- Estados de la orden (en proceso → listo → entregado) y consulta del paciente.
-- Resaltado de valores fuera de rango, historial y aviso por email.
+Además, la entrega de resultados suele realizarse en formato físico o mediante el envío manual de archivos PDF, por ejemplo, a través de WhatsApp.
 
-## Stack tecnológico
-Frontend:
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+## 💡 Solución
 
-Backend:
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+<p align=center>
+<img src="./docs/images/solucion.png" height=250>
+</p>
 
-Base de datos e infraestructura:
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+**LabResultados** propone un portal web que centraliza la gestión y consulta de los estudios:
 
-## Plan de trabajo
+1. La **recepción** registra las órdenes de los pacientes.
+2. El **bioquímico** carga los resultados y actualiza el estado de los estudios.
+3. Cuando los resultados están disponibles, el paciente recibe una **notificación por correo electrónico**.
+4. El **paciente** consulta el estado de su orden y accede a sus resultados mediante un código de orden o DNI.
+
+
+## 📍 Alcance
+
+El sistema contempla:
+
+- Registro y gestión de órdenes.
+- Carga de resultados estructurados: analito, valor, unidad y rango de referencia.
+- Gestión de estados de la orden: **En proceso → Listo → Entregado**.
+- Consulta de órdenes y resultados por parte del paciente.
+- Resaltado de valores fuera del rango de referencia.
+- Consulta del historial de resultados.
+- Notificación por correo electrónico cuando los resultados están disponibles.
+
+## 💻 Stack tecnológico
+
+### Frontend
+<p>
+  <img src="https://cdn.simpleicons.org/html5" width="48" alt="HTML5">
+  &nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/css" width="48" alt="CSS3">
+  &nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/javascript" width="48" alt="JavaScript">
+  &nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/typescript" width="48" alt="TypeScript">
+</p>
+
+### Backend
+<p>
+  <img src="https://cdn.simpleicons.org/openjdk" width="48" alt="Java">
+  &nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/springboot" width="48" alt="Spring Boot">
+</p>
+
+### Base de datos e infraestructura
+<p>
+  <img src="https://cdn.simpleicons.org/postgresql" width="48" alt="PostgreSQL">
+  &nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/docker" width="48" alt="Docker">
+</p>
+
+## 🗓️ Plan de trabajo
+
+Desarrollar un MVP funcional de portal de resultados y seguimiento de órdenes, desplegado online, en 3 etapas:
 | Etapa | Fecha máxima | Entregable |
 |---|---|---|
 | 1.ª Entrega | 30/08 | Propuesta + plan de trabajo + URL del repositorio |
-| 2.ª Entrega | 27/09 | Esquema de base de datos + listado de módulos (Condición de Regular) |
+| 2.ª Entrega | 27/09 | Esquema de base de datos + listado de módulos |
 | Entrega Final | 14/11 | Repo completo, despliegue online, informe y video |
 
-## Recursos y Documentación
-→ 📂 Propuesta completa: [`docs/propuesta.md`](docs/propuesta.md)
+## 📖 Documentación
 
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AriGrela/labresultados)
-![Trello](https://img.shields.io/badge/Trello-0052CC?style=for-the-badge&logo=trello&logoColor=white)
+Documentación completa disponible en [`docs`](docs/)
 
-## Estructura del repositorio
+## 📂 Estructura del repositorio 
 ```
 labresultados/
 ├── backend/     # API REST (Spring Boot)
@@ -64,3 +98,14 @@ labresultados/
 ├── docs/        # Propuesta, informes y documentación
 └── README.md
 ```
+
+## Créditos
+**Grupo 111:** [Ariel Grela](https://github.com/AriGrela) • [Matías N. Higa](https://github.com/emegiga) 
+
+**Tutor:** Fonzo, Santiago
+
+---
+
+<p align="center">
+  <sub>2026 · Trabajo Final - Tecnicatura Universitaria en Programación a Distancia</sub><br>
+</p>

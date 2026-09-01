@@ -51,7 +51,7 @@
 
 * **6 a 10 consultas por día** preguntando por resultados (promedio: **8**).
 * **2 a 3 minutos** por consulta → **16 a 24 minutos diarios** de recepción dedicados a esto (promedio: **20 min/día**).
-* **10 % a 15 % de los pacientes** concurren antes de que sus resultados estén disponibles → con 20–25 pacientes/día, unos **2 a 3 pacientes diarios** que viajan al pedo.
+* **10 % a 15 % de los pacientes** concurren antes de que sus resultados estén disponibles → con 20–25 pacientes/día, unos **2 a 3 pacientes diarios** se acercan al laboratorio en vano.
 
 Estas cifras muestran un costo de tiempo concreto y recurrente, tanto para la recepción como para el paciente, que una solución de software puede reducir.
 

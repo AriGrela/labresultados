@@ -158,14 +158,12 @@ La primera versión (MVP) cubre el circuito completo *registro de orden → carg
 
 ## 6. Plan de trabajo
 
-**Objetivo general:** Desarrollar un MVP funcional de portal de resultados y seguimiento de órdenes, desplegado online.
+**Objetivo general:** Desarrollar una aplicación web que permita agilizar la gestión y consulta de resultados de análisis clínicos, reduciendo las consultas presenciales y telefónicas relacionadas con la disponibilidad de resultados.
 
 **Objetivos específicos (medibles):**
-
-* Permitir al paciente consultar el estado de su orden por código/DNI.
-* Permitir la carga de resultados estructurados con rangos de referencia.
-* Resaltar automáticamente los valores fuera de rango.
-* Enviar aviso por email al pasar a "listo".
+* Reducir la cantidad de consultas que recibe la recepción sobre la disponibilidad de resultados, lo cual mejorará los tiempos de atención a los pacientes del día.
+* Disminuir las visitas innecesarias de pacientes que concurren antes de que sus resultados estén disponibles.
+* Mejorar la calidad del servicio al paciente, que podrá visualizar sus resultados sin requerir comunicación directa con el laboratorio.
 
 **Entregables por etapa:**
 

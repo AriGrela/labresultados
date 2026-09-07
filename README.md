@@ -19,9 +19,16 @@ A su vez, permite al personal del laboratorio **registrar órdenes, cargar resul
 
 ## ⚠️ Problema
 
-En laboratorios pequeños y medianos, los pacientes no siempre tienen una forma sencilla de saber si sus estudios ya están disponibles. Esto genera consultas frecuentes por teléfono o presenciales, como *"¿Ya están mis análisis?"*, lo que puede provocar una mayor carga de trabajo en recepción.
+En laboratorios pequeños y medianos, la falta de un sistema que ordene los procesos de entrega y notificación de resultados a pacientes, puede ocasionar saturación al área administrativa. 
 
-Además, la entrega de resultados suele realizarse en formato físico o mediante el envío manual de archivos PDF, por ejemplo, a través de WhatsApp.
+El sector de administrativo del laboratorio se ve desbordado por las siguientes tareas:
+1. El laboratorio recibe llamados y/o visitas de los pacientes para consultar el estado de sus estudios.
+2. La entrega de resultados es un proceso manual: Recepción se encarga de imprimir en papel o se enviar como PDF por WhatsApp/email cada uno.
+
+En paralelo, desde la perspectiva del paciente, la calidad de servicio que reciben se ve afectada:
+* Los pacientes que esperan sus resultados no tienen forma sencilla de saber si sus estudios ya están listos ni por qué medio los recibirán.
+* Los pacientes del día se ven demorados en su atención, debido a la saturación administrativa.
+
 
 ## 💡 Solución
 

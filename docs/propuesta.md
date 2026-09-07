@@ -45,7 +45,11 @@
 
 **Contexto:** Un laboratorio de análisis clínicos chico/mediano (de barrio) atiende entre 20 y 25 pacientes por día. La toma de muestra es por orden de llegada (no se usan turnos) y los resultados se procesan a lo largo de uno o varios días.
 
-**Problema:** El paciente **no tiene forma de saber si sus estudios ya están listos**. Para averiguarlo llama por teléfono o se acerca al laboratorio sin necesidad, lo que satura a la recepción con consultas repetitivas (*"¿ya están mis análisis?"*). Además, la entrega de resultados es manual: se imprimen en papel o se envían como PDF por WhatsApp/email uno por uno.
+**Problema:** El sector de administrativo del laboratorio se ve saturado por las siguientes tareas:
+1. Los pacientes no tienen forma de saber si sus estudios ya están listos, ni porqué medio los recibirán. 
+2. En consecuencia, el laboratorio recibe llamados y/o visitas de los pacientes para consultar el estado de sus estudios.
+3. La entrega de resultados es un proceso manual: Recepción se encarga de imprimir en papel o se enviar como PDF por WhatsApp/email cada uno.
+El flujo de trabajo actual desborda a los administrativos del laboratorio (consultas, entrega de resultados, gestión diaria, atención de los pacientes del día).
 
 **Impacto medible (relevamiento en un laboratorio real):**
 

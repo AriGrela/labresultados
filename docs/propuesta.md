@@ -162,10 +162,16 @@ La primera versión (MVP) cubre el circuito completo *registro de orden → carg
 
 **Objetivo general:** Desarrollar una aplicación web que permita agilizar la gestión y consulta de resultados de análisis clínicos, reduciendo las consultas presenciales y telefónicas relacionadas con la disponibilidad de resultados.
 
-**Objetivos específicos (medibles):**
-* Reducir la cantidad de consultas que recibe la recepción sobre la disponibilidad de resultados, lo cual mejorará los tiempos de atención a los pacientes del día.
+**Objetivos específicos del proyecto (negocio):**
+* Reducir la cantidad de consultas que recibe la recepción sobre la disponibilidad de resultados, mejorando los tiempos de atención a los pacientes del día.
 * Disminuir las visitas innecesarias de pacientes que concurren antes de que sus resultados estén disponibles.
 * Mejorar la calidad del servicio al paciente, que podrá visualizar sus resultados sin requerir comunicación directa con el laboratorio.
+
+**Objetivos específicos de la aplicación (producto)** — vinculados a los criterios de éxito:
+* Permitir al paciente consultar el estado de su orden y sus resultados por código de orden / DNI, sin intervención del laboratorio.
+* Permitir al laboratorio registrar órdenes y cargar resultados estructurados de punta a punta.
+* Resaltar automáticamente los valores fuera del rango de referencia.
+* Notificar por email al paciente cuando sus resultados están disponibles.
 
 **Entregables por etapa:**
 

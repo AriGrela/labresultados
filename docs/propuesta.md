@@ -38,6 +38,7 @@
    * [7.3 Conocimientos](#73-conocimientos)
 8. [Análisis de competencia y diferenciación](#8-análisis-de-competencia-y-diferenciación)
 9. [Uso crítico de IA](#9-uso-crítico-de-ia)
+10. [Protección de datos y marco legal](#10-protección-de-datos-y-marco-legal)
 
 ---
 
@@ -224,3 +225,15 @@ El alcance del MVP entra en el cronograma de entregas. Las funcionalidades "nice
 ## 9. Uso crítico de IA
 
 Se utilizará IA como asistente (por ejemplo para refinar la propuesta, generar código repetitivo, generar recursos gráficos). **El criterio arquitectónico y la defensa de la lógica de negocio será responsabilidad del equipo**: cada decisión (stack, modelo de datos, alcance) será revisada y validada por el grupo.
+
+---
+
+## 10. Protección de datos y marco legal
+
+Los resultados de análisis clínicos son **datos personales sensibles (datos de salud)**, por lo que su tratamiento está alcanzado por la normativa vigente. El proyecto contemplará la **Ley 25.326 de Protección de Datos Personales** (Argentina) y los principios asociados al tratamiento de datos de salud:
+
+* **Consentimiento e información** al titular de los datos.
+* **Finalidad limitada** y **confidencialidad** de la información.
+* **Medidas de seguridad** en el almacenamiento y la transmisión: acceso por roles, cifrado de credenciales y de la conexión, y acceso del paciente restringido exclusivamente a su propia información.
+
+Se deja constancia de que, si bien la validación regulatoria formal (por ejemplo, la firma digital del profesional) queda **fuera del alcance del MVP**, el diseño del sistema **tendrá en cuenta estos requisitos de protección de datos desde el inicio**.

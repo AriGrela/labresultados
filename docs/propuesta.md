@@ -97,6 +97,8 @@ El flujo actual del laboratorio se desarrolla de forma principalmente manual. El
 
 ## 3. Propuesta de solución
 
+El **usuario de primera línea del sistema es el laboratorio** (recepción y bioquímico), que es quien gestiona las órdenes y carga los resultados; el **paciente** es un usuario secundario que consulta. Por eso, la solución ataca principalmente dos problemas de estos actores: la **saturación de la recepción** por consultas repetitivas y la **falta de visibilidad del paciente** sobre el estado de sus estudios.
+
 Un portal web donde:
 
 * La recepción **registra la orden** del paciente y sus estudios, generando un **código de orden**.

@@ -207,7 +207,9 @@ El alcance del MVP entra en el cronograma de entregas. Las funcionalidades "nice
 
 ### 7.3 Conocimientos
 
-Durante la cursada, el equipo vio Java, Spring Boot, JPA, DTOs y APIs REST, y HTML/CSS/JS/TS. La elección se apoya en lo que ya se domina.
+**Técnicos:** durante la cursada el equipo vio Java, Spring Boot, JPA, DTOs y APIs REST, y HTML/CSS/JS/TS. La elección del stack se apoya en lo que ya se domina.
+
+**Del negocio:** uno de los integrantes tiene acceso directo a un laboratorio de análisis clínicos (contacto en el rubro), lo que permitió **relevar el flujo real de trabajo**, obtener las **métricas de impacto** y **validar el problema** con una fuente del dominio. Este conocimiento del negocio reduce el riesgo de construir una solución técnicamente correcta pero irrelevante para el proceso, y respalda la viabilidad de la propuesta más allá de lo estrictamente técnico.
 
 ---
 

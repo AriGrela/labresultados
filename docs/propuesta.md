@@ -216,9 +216,19 @@ El alcance del MVP entra en el cronograma de entregas. Las funcionalidades "nice
 
 ## 8. Análisis de competencia y diferenciación
 
-* **Competidores directos:** portales de resultados de laboratorios grandes (cadenas). Robustos, pero pensados para su propia operación; no son un producto accesible para el laboratorio chico.
-* **Competidores indirectos:** entrega por WhatsApp/email manual, retiro de papel en el mostrador, consulta telefónica.
-* **Diferenciadores de LabResultados:** foco en el laboratorio chico/mediano, bajo costo, simple, sin depender de integración con equipos, y con **resaltado de valores fuera de rango e historial** (algo que un PDF suelto no ofrece).
+> _**LabResultados** busca competir contra el proceso manual que actualmente utilizan los laboratorios chicos/medianos para informar y entregar resultados._
+
+**Competidores directos:** 
+* Alternativas para informar/entregar resultados:
+   * 🌐 Portal web (desarrollo propio del laboratorio)
+   * 📄 Papel
+   * ☎️ Consulta telefónica
+   * 📧 Email / 📱 WhatsApp / 💬 SMS
+
+* **Competidores indirectos:** 
+Portales de resultados de laboratorios grandes (cadenas): Robustos, pero pensados para su propia operación (foco en gestión integral del laboratorio). No es un producto esté orientado a pequeños y medianos laboratorios.
+
+* **Diferenciadores de LabResultados:** Énfasis en el laboratorio chico/mediano, bajo costo, simple, sin depender de integración con equipos, y con **resaltado de valores fuera de rango e historial** (algo que un PDF suelto no ofrece).
 
 ---
 

@@ -126,13 +126,18 @@ Autenticación por roles (recepción, bioquímico, admin) para el personal, y ac
 
 ## 4. Alcance
 
-La primera versión (MVP) cubre el circuito completo *registro de orden → carga de resultados → consulta del paciente*, sin integrarse con los equipos del laboratorio ni con sistemas de facturación.
+La primera versión (MVP) contempla el circuito completo de gestión de resultados de laboratorio:
 
----
+<p align=center>
+<img src="./images/alcance.jpg" width=600>
+</p>
 
-## 5. Funcionalidades
+La aplicación estará orientada al personal del laboratorio y a los pacientes. 
+Permitirá: 
+* al **laboratorio**: gestionar las órdenes, cargar y consultar resultados y notificar su disponibilidad.
+* a los **pacientes**: saber cuando están sus resultados, y acceder a ellos de forma directa.
 
-### 5.1 MVP
+#### 4.1 MVP
 
 * Registro de órdenes (paciente + estudios pedidos + obra social como dato).
 * Carga de resultados estructurados: Analito (componente), valor, unidad, rango de referencia.
@@ -143,14 +148,15 @@ La primera versión (MVP) cubre el circuito completo *registro de orden → carg
 * Aviso por email cuando los resultados pasan a "listo".
 * Gestión de usuarios y roles del personal (recepción, bioquímico, admin).
 
-### 5.2 Nice to have (si sobra tiempo)
+#### 4.2 Nice to have
 
+En caso de que se disponga de tiempo, se contempla agregar las siguientes funcionalidades:
 * Gráfico de evolución/tendencia de un analito en el tiempo.
 * Descarga del resultado en PDF.
 * Notificación por WhatsApp además del email.
 * Panel con métricas para el laboratorio.
 
-### 5.3 Fuera de alcance
+#### 4.3 Fuera de alcance
 
 * Integración con equipos / analizadores del laboratorio.
 * Facturación y pasarela de pagos.
@@ -159,7 +165,7 @@ La primera versión (MVP) cubre el circuito completo *registro de orden → carg
 
 ---
 
-## 6. Plan de trabajo
+## 5. Plan de trabajo
 
 **Objetivo general:** Desarrollar una aplicación web que permita agilizar la gestión y consulta de resultados de análisis clínicos, reduciendo las consultas presenciales y telefónicas relacionadas con la disponibilidad de resultados.
 
@@ -196,17 +202,17 @@ La primera versión (MVP) cubre el circuito completo *registro de orden → carg
 
 ---
 
-## 7. Viabilidad
+## 6. Viabilidad
 
-### 7.1 Técnica
+### 6.1 Técnica
 
 Viable con el stack conocido (Java/Spring Boot/JPA + PostgreSQL). Única dependencia externa: envío de email (SMTP), no crítica y postergable. Sin dependencia de integración con equipos.
 
-### 7.2 Temporal
+### 6.2 Temporal
 
 El alcance del MVP entra en el cronograma de entregas. Las funcionalidades "nice to have" quedan como colchón descartable.
 
-### 7.3 Conocimientos
+### 6.3 Conocimientos
 
 **Técnicos:** durante la cursada el equipo vio Java, Spring Boot, JPA, DTOs y APIs REST, y HTML/CSS/JS/TS. La elección del stack se apoya en lo que ya se domina.
 
@@ -214,7 +220,7 @@ El alcance del MVP entra en el cronograma de entregas. Las funcionalidades "nice
 
 ---
 
-## 8. Análisis de competencia y diferenciación
+## 7. Análisis de competencia y diferenciación
 
 > _**LabResultados** busca competir contra el proceso manual que actualmente utilizan los laboratorios chicos/medianos para informar y entregar resultados._
 
@@ -232,13 +238,13 @@ Portales de resultados de laboratorios grandes (cadenas): Robustos, pero pensado
 
 ---
 
-## 9. Uso crítico de IA
+## 8. Uso crítico de IA
 
 Se utilizará IA como asistente (por ejemplo para refinar la propuesta, generar código repetitivo, generar recursos gráficos). **El criterio arquitectónico y la defensa de la lógica de negocio será responsabilidad del equipo**: cada decisión (stack, modelo de datos, alcance) será revisada y validada por el grupo.
 
 ---
 
-## 10. Protección de datos y marco legal
+## 9. Protección de datos y marco legal
 
 Los resultados de análisis clínicos son **datos personales sensibles (datos de salud)**, por lo que su tratamiento está alcanzado por la normativa vigente. El proyecto contemplará la **Ley 25.326 de Protección de Datos Personales** (Argentina) y los principios asociados al tratamiento de datos de salud:
 

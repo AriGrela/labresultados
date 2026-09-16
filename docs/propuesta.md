@@ -25,20 +25,19 @@
    * [3.1 Stack tecnológico](#31-stack-tecnológico)
    * [3.2 Arquitectura](#32-arquitectura)
 4. [Alcance](#4-alcance)
-5. [Funcionalidades](#5-funcionalidades)
 
-   * [5.1 MVP](#51-mvp)
-   * [5.2 Nice to have](#52-nice-to-have-si-sobra-tiempo)
-   * [5.3 Fuera de alcance](#53-fuera-de-alcance)
-6. [Plan de trabajo](#6-plan-de-trabajo)
-7. [Viabilidad](#7-viabilidad)
+   * [4.1 MVP](#41-mvp)
+   * [4.2 Nice to have](#42-nice-to-have-si-sobra-tiempo)
+   * [4.3 Fuera de alcance](#43-fuera-de-alcance)
+5. [Plan de trabajo](#6-plan-de-trabajo)
+6. [Viabilidad](#7-viabilidad)
 
-   * [7.1 Técnica](#71-técnica)
-   * [7.2 Temporal](#72-temporal)
-   * [7.3 Conocimientos](#73-conocimientos)
-8. [Análisis de competencia y diferenciación](#8-análisis-de-competencia-y-diferenciación)
-9. [Uso crítico de IA](#9-uso-crítico-de-ia)
-10. [Protección de datos y marco legal](#10-protección-de-datos-y-marco-legal)
+   * [6.1 Técnica](#61-técnica)
+   * [6.2 Temporal](#62-temporal)
+   * [6.3 Conocimientos](#63-conocimientos)
+7. [Análisis de competencia y diferenciación](#7-análisis-de-competencia-y-diferenciación)
+8. [Uso crítico de IA](#8-uso-crítico-de-ia)
+9. [Protección de datos y marco legal](#9-protección-de-datos-y-marco-legal)
 
 ---
 

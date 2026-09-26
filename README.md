@@ -3,7 +3,7 @@
 </p>
 <p align=center> <strong>Portal de resultados y seguimiento de órdenes para laboratorios de análisis clínicos</strong> </p>
 
-<p align=center> <a href="docs/propuesta.md"> Propuesta de Proyecto</a> • <a href="#créditos"> Créditos </p>
+<p align=center> <a href="docs/propuesta.md"> Propuesta de Proyecto</a> • <a href="docs/modulos.md">Listado de Módulos</a> • <a href="#créditos"> Créditos </p>
 
 <p align=center> <a href="https://www.utn.edu.ar" >
     <img src="https://img.shields.io/badge/UTN-Universidad%20Tecnológica%20Nacional-0056b3?style=for-the-badge" alt="Universidad Tecnológica Nacional" >

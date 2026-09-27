@@ -164,3 +164,126 @@ CREATE TABLE notificacion (
     detalle         VARCHAR(255),                  -- ej.: motivo de un envío fallido
     CONSTRAINT ck_notificacion_estado CHECK (estado IN ('PENDIENTE', 'ENVIADA', 'FALLIDA'))
 );
+
+
+-- =====================================================================
+-- 2. RELACIONES (claves foráneas)
+--    Todas son N:1 (muchos → uno): la flecha va desde la tabla que
+--    tiene la clave foránea hacia la tabla referenciada.
+--    Ver el diagrama en database/diagrama-er.md
+-- =====================================================================
+
+-- usuario (N) → (1) rol: cada usuario tiene un único rol
+ALTER TABLE usuario
+    ADD CONSTRAINT fk_usuario_rol
+    FOREIGN KEY (rol_id) REFERENCES rol (id);
+
+-- paciente (N) → (1) obra_social: cobertura actual del paciente (opcional)
+ALTER TABLE paciente
+    ADD CONSTRAINT fk_paciente_obra_social
+    FOREIGN KEY (obra_social_id) REFERENCES obra_social (id);
+
+-- analito (N) → (1) estudio: un estudio se compone de uno o más analitos
+ALTER TABLE analito
+    ADD CONSTRAINT fk_analito_estudio
+    FOREIGN KEY (estudio_id) REFERENCES estudio (id);
+
+-- rango_referencia (N) → (1) analito: un analito puede tener varios rangos
+-- (si se borra el analito, sus rangos se borran con él)
+ALTER TABLE rango_referencia
+    ADD CONSTRAINT fk_rango_analito
+    FOREIGN KEY (analito_id) REFERENCES analito (id) ON DELETE CASCADE;
+
+-- orden (N) → (1) paciente: un paciente puede tener muchas órdenes
+ALTER TABLE orden
+    ADD CONSTRAINT fk_orden_paciente
+    FOREIGN KEY (paciente_id) REFERENCES paciente (id);
+
+-- orden (N) → (1) obra_social: cobertura usada en la orden (opcional)
+ALTER TABLE orden
+    ADD CONSTRAINT fk_orden_obra_social
+    FOREIGN KEY (obra_social_id) REFERENCES obra_social (id);
+
+-- orden (N) → (1) usuario: quién registró la orden
+ALTER TABLE orden
+    ADD CONSTRAINT fk_orden_usuario
+    FOREIGN KEY (creada_por) REFERENCES usuario (id);
+
+-- orden_estudio (N) → (1) orden    } juntas resuelven la relación
+-- orden_estudio (N) → (1) estudio  } N:M entre orden y estudio
+ALTER TABLE orden_estudio
+    ADD CONSTRAINT fk_orden_estudio_orden
+    FOREIGN KEY (orden_id) REFERENCES orden (id) ON DELETE CASCADE;
+
+ALTER TABLE orden_estudio
+    ADD CONSTRAINT fk_orden_estudio_estudio
+    FOREIGN KEY (estudio_id) REFERENCES estudio (id);
+
+-- resultado (N) → (1) orden_estudio: el resultado pertenece a un estudio pedido en la orden
+-- (sin CASCADE a propósito: una orden que ya tiene resultados NO se puede borrar)
+ALTER TABLE resultado
+    ADD CONSTRAINT fk_resultado_orden_estudio
+    FOREIGN KEY (orden_estudio_id) REFERENCES orden_estudio (id);
+
+-- resultado (N) → (1) analito: qué se midió
+ALTER TABLE resultado
+    ADD CONSTRAINT fk_resultado_analito
+    FOREIGN KEY (analito_id) REFERENCES analito (id);
+
+-- resultado (N) → (1) usuario: bioquímico que cargó el resultado
+ALTER TABLE resultado
+    ADD CONSTRAINT fk_resultado_usuario
+    FOREIGN KEY (cargado_por) REFERENCES usuario (id);
+
+-- notificacion (N) → (1) orden: registro de los avisos enviados por cada orden
+ALTER TABLE notificacion
+    ADD CONSTRAINT fk_notificacion_orden
+    FOREIGN KEY (orden_id) REFERENCES orden (id);
+
+
+-- =====================================================================
+-- 3. ÍNDICES
+--    PostgreSQL no indexa automáticamente las claves foráneas. Se crean
+--    índices en las columnas que más se usan para buscar y unir tablas.
+--    (Las columnas UNIQUE —dni, codigo, email— ya tienen índice propio.)
+-- =====================================================================
+CREATE INDEX ix_orden_paciente         ON orden (paciente_id);       -- órdenes de un paciente
+CREATE INDEX ix_orden_estado           ON orden (estado);            -- órdenes pendientes de resultados
+CREATE INDEX ix_orden_estudio_estudio  ON orden_estudio (estudio_id);
+CREATE INDEX ix_analito_estudio        ON analito (estudio_id);
+CREATE INDEX ix_rango_analito          ON rango_referencia (analito_id);
+CREATE INDEX ix_resultado_analito      ON resultado (analito_id);    -- historial de un analito
+CREATE INDEX ix_notificacion_orden     ON notificacion (orden_id);
+
+
+-- =====================================================================
+-- 4. VISTA: historial de resultados del paciente
+--    Une paciente → orden → estudio → resultado → analito en una sola
+--    consulta. La usa el módulo "Historial de resultados" para mostrar
+--    la evolución de un analito en el tiempo (ej.: la glucosa de las
+--    últimas órdenes del paciente).
+--    Solo incluye órdenes LISTO o ENTREGADO: una orden EN_PROCESO no
+--    debe mostrarle resultados al paciente (regla del módulo Consulta).
+-- =====================================================================
+CREATE VIEW vista_historial_resultados AS
+SELECT
+    p.id              AS paciente_id,
+    p.dni,
+    o.codigo          AS codigo_orden,
+    o.fecha_creacion  AS fecha_orden,
+    o.estado          AS estado_orden,
+    e.nombre          AS estudio,
+    a.id              AS analito_id,
+    a.nombre          AS analito,
+    r.valor,
+    r.unidad,
+    r.ref_min,
+    r.ref_max,
+    r.fuera_de_rango
+FROM resultado r
+JOIN orden_estudio oe ON oe.id = r.orden_estudio_id
+JOIN orden         o  ON o.id  = oe.orden_id
+JOIN paciente      p  ON p.id  = o.paciente_id
+JOIN estudio       e  ON e.id  = oe.estudio_id
+JOIN analito       a  ON a.id  = r.analito_id
+WHERE o.estado IN ('LISTO', 'ENTREGADO');

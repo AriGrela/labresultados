@@ -27,10 +27,10 @@
 4. [Alcance](#4-alcance)
 
    * [4.1 MVP](#41-mvp)
-   * [4.2 Nice to have](#42-nice-to-have-si-sobra-tiempo)
+   * [4.2 Nice to have](#42-nice-to-have)
    * [4.3 Fuera de alcance](#43-fuera-de-alcance)
-5. [Plan de trabajo](#6-plan-de-trabajo)
-6. [Viabilidad](#7-viabilidad)
+5. [Plan de trabajo](#5-plan-de-trabajo)
+6. [Viabilidad](#6-viabilidad)
 
    * [6.1 Técnica](#61-técnica)
    * [6.2 Temporal](#62-temporal)

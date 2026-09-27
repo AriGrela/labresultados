@@ -280,6 +280,7 @@ Permitir al paciente consultar los resultados de estudios realizados anteriormen
 * Visualizar las órdenes anteriores.
 * Consultar los resultados asociados a una orden anterior.
 * Consultar los estudios realizados en cada orden.
+* Visualizar la evolución de un analito a lo largo del tiempo, comparando el resultado actual con los anteriores.
 
 **Datos involucrados:**
 
@@ -297,6 +298,7 @@ Permitir al paciente consultar los resultados de estudios realizados anteriormen
 * El historial debe contener únicamente información correspondiente al paciente autenticado/identificado.
 * Los resultados deben mantenerse asociados a la orden en la que fueron realizados.
 * Cada resultado debe conservar la información necesaria para su interpretación, incluyendo valor, unidad y rango de referencia.
+* La representación gráfica de la evolución queda como funcionalidad opcional (*nice to have*).
 
 **Interacción con otros módulos:**
 

@@ -143,7 +143,7 @@ Permitirá:
 * Estados de la orden: en proceso → listo → entregado.
 * Consulta del paciente por código de orden / DNI.
 * Resaltado automático de valores fuera de rango.
-* Historial de resultados por paciente.
+* Historial de resultados por paciente, con la evolución de cada analito en el tiempo.
 * Aviso por email cuando los resultados pasan a "listo".
 * Gestión de usuarios y roles del personal (recepción, bioquímico, admin).
 

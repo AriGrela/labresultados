@@ -16,53 +16,7 @@
 | **[**Administración de estudios**](#administración-de-estudios)**  | Administrador del laboratorio  | Configurar estudios, analitos y rangos de referencia               |
 
 ---
-### Gestión de órdenes
 
-**Objetivo:**
-Permitir al personal de recepción registrar y gestionar las órdenes correspondientes a los estudios solicitados por cada paciente.
-
-**Actor/es involucrado/s:**
-
-* Actor principal: Administrativo / Recepción.
-* Entidades relacionadas: Paciente, Obra Social, Estudio.
-
-**Funcionalidades principales:**
-
-* Registrar una nueva orden.
-* Asociar la orden a un paciente.
-* Registrar los estudios solicitados.
-* Registrar la obra social del paciente como dato asociado a la orden.
-* Generar un código de orden.
-* Consultar una orden.
-* Gestionar el estado de la orden.
-
-**Datos involucrados:**
-
-* Paciente.
-* Orden.
-* Estudio.
-* Obra social.
-* Estado de la orden.
-* Fecha de la orden.
-
-**Reglas de negocio:**
-
-* Una orden debe estar asociada a un paciente.
-* Una orden debe contener uno o más estudios.
-* La obra social se registra solo como dato (sin facturación): el paciente guarda su cobertura actual y la orden conserva la cobertura utilizada en ese momento.
-* La orden atraviesa los estados definidos por el sistema: `En proceso → Listo → Entregado`.
-
-**Interacción con otros módulos:**
-
-* Se relaciona con **Gestión de pacientes** para identificar al paciente asociado a la orden.
-* Se relaciona con **Administración de estudios** para seleccionar los estudios solicitados.
-* Se relaciona con **Gestión de resultados** para asociar los resultados correspondientes a los estudios de la orden.
-* Se relaciona con **Notificaciones** cuando la orden pasa al estado `Listo`.
-
-**Resultado esperado:**
-Una orden correctamente registrada, asociada a un paciente y a los estudios solicitados, con un código que permita posteriormente consultar su estado y resultados.
-
----
 ### Gestión de usuarios y roles
 
 **Objetivo:**
@@ -154,6 +108,54 @@ Permitir al personal de recepción registrar y consultar los datos necesarios de
 **Resultado esperado:**
 
 Un registro de paciente correctamente almacenado que permita identificarlo y relacionarlo con sus órdenes y resultados.
+
+---
+
+### Gestión de órdenes
+
+**Objetivo:**
+Permitir al personal de recepción registrar y gestionar las órdenes correspondientes a los estudios solicitados por cada paciente.
+
+**Actor/es involucrado/s:**
+
+* Actor principal: Administrativo / Recepción.
+* Entidades relacionadas: Paciente, Obra Social, Estudio.
+
+**Funcionalidades principales:**
+
+* Registrar una nueva orden.
+* Asociar la orden a un paciente.
+* Registrar los estudios solicitados.
+* Registrar la obra social del paciente como dato asociado a la orden.
+* Generar un código de orden.
+* Consultar una orden.
+* Gestionar el estado de la orden.
+
+**Datos involucrados:**
+
+* Paciente.
+* Orden.
+* Estudio.
+* Obra social.
+* Estado de la orden.
+* Fecha de la orden.
+
+**Reglas de negocio:**
+
+* Una orden debe estar asociada a un paciente.
+* Una orden debe contener uno o más estudios.
+* La obra social se registra solo como dato (sin facturación): el paciente guarda su cobertura actual y la orden conserva la cobertura utilizada en ese momento.
+* La orden atraviesa los estados definidos por el sistema: `En proceso → Listo → Entregado`.
+
+**Interacción con otros módulos:**
+
+* Se relaciona con **Gestión de pacientes** para identificar al paciente asociado a la orden.
+* Se relaciona con **Administración de estudios** para seleccionar los estudios solicitados.
+* Se relaciona con **Gestión de resultados** para asociar los resultados correspondientes a los estudios de la orden.
+* Se relaciona con **Notificaciones** cuando la orden pasa al estado `Listo`.
+
+**Resultado esperado:**
+Una orden correctamente registrada, asociada a un paciente y a los estudios solicitados, con un código que permita posteriormente consultar su estado y resultados.
 
 ---
 

@@ -117,9 +117,12 @@ Un portal web donde:
 
 ### 3.2 Arquitectura
 
-Aplicación web en 3 capas: un **frontend** (HTML/CSS/JS) que consume una **API REST** en Spring Boot, la cual persiste en **PostgreSQL** vía JPA/Hibernate.
+**Arquitectura macro:** el sistema se divide en dos grandes componentes:
 
-Autenticación por roles (recepción, bioquímico, admin) para el personal, y acceso del paciente por código de orden / DNI. Todo empaquetado con Docker Compose para desarrollo.
+- **Frontend** (HTML/CSS/JS): la interfaz que usan el personal del laboratorio y los pacientes.
+- **Backend** (API REST en Spring Boot + base de datos PostgreSQL): expone los servicios y persiste los datos vía JPA/Hibernate.
+
+El estilo arquitectónico (monolito modular en capas) y la organización interna del backend y del frontend se detallan en [Arquitectura del sistema](arquitectura.md).
 
 ---
 

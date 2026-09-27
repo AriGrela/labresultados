@@ -65,8 +65,6 @@ El sistema contempla:
   <img src="https://cdn.simpleicons.org/css" width="48" alt="CSS3">
   &nbsp;&nbsp;
   <img src="https://cdn.simpleicons.org/javascript" width="48" alt="JavaScript">
-  &nbsp;&nbsp;
-  <img src="https://cdn.simpleicons.org/typescript" width="48" alt="TypeScript">
 </p>
 
 ### Backend

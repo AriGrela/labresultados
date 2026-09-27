@@ -111,7 +111,7 @@ Un portal web donde:
 | Capa          | Elección                                                             | Justificación                                                                                                |
 | ------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Backend       | Java + Spring Boot + JPA/Hibernate (Lombok, DTOs, API REST)          | Es el stack que el equipo ya cursa (Programación III). Cero curva de aprendizaje.                            |
-| Frontend      | HTML + CSS + JavaScript (TypeScript opcional)                        | También parte del plan de estudios.                                                                          |
+| Frontend      | HTML + CSS + JavaScript                                              | También parte del plan de estudios. Sin framework, para no sumar curva de aprendizaje.                       |
 | Base de datos | PostgreSQL (relacional / SQL)                                        | Datos estructurados con relaciones fuertes e integridad (ACID). Se integra nativo con JPA.                   |
 | Despliegue    | Docker Compose (desarrollo) + nube (Render/Railway + Supabase/Aiven) | Docker iguala entornos entre los dos integrantes. Confirmaremos el resto del stack previo a la 2da entrega (una vez tengamos más claridad del diseño y estructura del proyecto) |
 

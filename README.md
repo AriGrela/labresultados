@@ -3,7 +3,7 @@
 </p>
 <p align=center> <strong>Portal de resultados y seguimiento de órdenes para laboratorios de análisis clínicos</strong> </p>
 
-<p align=center> <a href="docs/propuesta.md"> Propuesta de Proyecto</a> • <a href="docs/modulos.md">Listado de Módulos</a> • <a href="database/diagrama-er.md">Base de Datos</a> • <a href="#créditos"> Créditos </p>
+<p align=center> <a href="docs/propuesta.md"> Propuesta de Proyecto</a> • <a href="docs/modulos.md">Listado de Módulos</a> • <a href="database/diagrama-er.md">Base de Datos</a> • <a href="docs/arquitectura.md">Arquitectura</a> • <a href="#créditos"> Créditos </p>
 
 <p align=center> <a href="https://www.utn.edu.ar" >
     <img src="https://img.shields.io/badge/UTN-Universidad%20Tecnológica%20Nacional-0056b3?style=for-the-badge" alt="Universidad Tecnológica Nacional" >
@@ -65,8 +65,6 @@ El sistema contempla:
   <img src="https://cdn.simpleicons.org/css" width="48" alt="CSS3">
   &nbsp;&nbsp;
   <img src="https://cdn.simpleicons.org/javascript" width="48" alt="JavaScript">
-  &nbsp;&nbsp;
-  <img src="https://cdn.simpleicons.org/typescript" width="48" alt="TypeScript">
 </p>
 
 ### Backend

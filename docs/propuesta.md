@@ -27,10 +27,10 @@
 4. [Alcance](#4-alcance)
 
    * [4.1 MVP](#41-mvp)
-   * [4.2 Nice to have](#42-nice-to-have-si-sobra-tiempo)
+   * [4.2 Nice to have](#42-nice-to-have)
    * [4.3 Fuera de alcance](#43-fuera-de-alcance)
-5. [Plan de trabajo](#6-plan-de-trabajo)
-6. [Viabilidad](#7-viabilidad)
+5. [Plan de trabajo](#5-plan-de-trabajo)
+6. [Viabilidad](#6-viabilidad)
 
    * [6.1 Técnica](#61-técnica)
    * [6.2 Temporal](#62-temporal)
@@ -111,15 +111,18 @@ Un portal web donde:
 | Capa          | Elección                                                             | Justificación                                                                                                |
 | ------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Backend       | Java + Spring Boot + JPA/Hibernate (Lombok, DTOs, API REST)          | Es el stack que el equipo ya cursa (Programación III). Cero curva de aprendizaje.                            |
-| Frontend      | HTML + CSS + JavaScript (TypeScript opcional)                        | También parte del plan de estudios.                                                                          |
+| Frontend      | HTML + CSS + JavaScript                                              | También parte del plan de estudios. Sin framework, para no sumar curva de aprendizaje.                       |
 | Base de datos | PostgreSQL (relacional / SQL)                                        | Datos estructurados con relaciones fuertes e integridad (ACID). Se integra nativo con JPA.                   |
 | Despliegue    | Docker Compose (desarrollo) + nube (Render/Railway + Supabase/Aiven) | Docker iguala entornos entre los dos integrantes. Confirmaremos el resto del stack previo a la 2da entrega (una vez tengamos más claridad del diseño y estructura del proyecto) |
 
 ### 3.2 Arquitectura
 
-Aplicación web en 3 capas: un **frontend** (HTML/CSS/JS) que consume una **API REST** en Spring Boot, la cual persiste en **PostgreSQL** vía JPA/Hibernate.
+**Arquitectura macro:** el sistema se divide en dos grandes componentes:
 
-Autenticación por roles (recepción, bioquímico, admin) para el personal, y acceso del paciente por código de orden / DNI. Todo empaquetado con Docker Compose para desarrollo.
+- **Frontend** (HTML/CSS/JS): la interfaz que usan el personal del laboratorio y los pacientes.
+- **Backend** (API REST en Spring Boot + base de datos PostgreSQL): expone los servicios y persiste los datos vía JPA/Hibernate.
+
+El estilo arquitectónico (monolito modular en capas) y la organización interna del backend y del frontend se detallan en [Arquitectura del sistema](arquitectura.md).
 
 ---
 
@@ -143,7 +146,7 @@ Permitirá:
 * Estados de la orden: en proceso → listo → entregado.
 * Consulta del paciente por código de orden / DNI.
 * Resaltado automático de valores fuera de rango.
-* Historial de resultados por paciente.
+* Historial de resultados por paciente, con la evolución de cada analito en el tiempo.
 * Aviso por email cuando los resultados pasan a "listo".
 * Gestión de usuarios y roles del personal (recepción, bioquímico, admin).
 

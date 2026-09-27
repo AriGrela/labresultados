@@ -16,53 +16,7 @@
 | **[**Administración de estudios**](#administración-de-estudios)**  | Administrador del laboratorio  | Configurar estudios, analitos y rangos de referencia               |
 
 ---
-### Gestión de órdenes
 
-**Objetivo:**
-Permitir al personal de recepción registrar y gestionar las órdenes correspondientes a los estudios solicitados por cada paciente.
-
-**Actor/es involucrado/s:**
-
-* Actor principal: Administrativo / Recepción.
-* Entidades relacionadas: Paciente, Obra Social, Estudio.
-
-**Funcionalidades principales:**
-
-* Registrar una nueva orden.
-* Asociar la orden a un paciente.
-* Registrar los estudios solicitados.
-* Registrar la obra social del paciente como dato asociado a la orden.
-* Generar un código de orden.
-* Consultar una orden.
-* Gestionar el estado de la orden.
-
-**Datos involucrados:**
-
-* Paciente.
-* Orden.
-* Estudio.
-* Obra social.
-* Estado de la orden.
-* Fecha de la orden.
-
-**Reglas de negocio:**
-
-* Una orden debe estar asociada a un paciente.
-* Una orden debe contener uno o más estudios.
-* La obra social se registra únicamente como dato asociado al paciente/orden.
-* La orden atraviesa los estados definidos por el sistema: `En proceso → Listo → Entregado`.
-
-**Interacción con otros módulos:**
-
-* Se relaciona con **Gestión de pacientes** para identificar al paciente asociado a la orden.
-* Se relaciona con **Administración de estudios** para seleccionar los estudios solicitados.
-* Se relaciona con **Gestión de resultados** para asociar los resultados correspondientes a los estudios de la orden.
-* Se relaciona con **Notificaciones** cuando la orden pasa al estado `Listo`.
-
-**Resultado esperado:**
-Una orden correctamente registrada, asociada a un paciente y a los estudios solicitados, con un código que permita posteriormente consultar su estado y resultados.
-
----
 ### Gestión de usuarios y roles
 
 **Objetivo:**
@@ -132,6 +86,8 @@ Permitir al personal de recepción registrar y consultar los datos necesarios de
 * Paciente.
 * Nombre y apellido.
 * DNI.
+* Sexo.
+* Fecha de nacimiento.
 * Datos de contacto.
 * Obra social.
 * Órdenes asociadas.
@@ -140,7 +96,8 @@ Permitir al personal de recepción registrar y consultar los datos necesarios de
 
 * Un paciente puede tener una o más órdenes.
 * Los datos del paciente deben permitir identificarlo de forma inequívoca.
-* La obra social se registra como dato del paciente y no implica funcionalidades de facturación.
+* La obra social registrada en el paciente es su cobertura actual y no implica funcionalidades de facturación.
+* El sexo y la fecha de nacimiento se utilizan para determinar el rango de referencia que corresponde a cada resultado.
 
 **Interacción con otros módulos:**
 
@@ -151,6 +108,54 @@ Permitir al personal de recepción registrar y consultar los datos necesarios de
 **Resultado esperado:**
 
 Un registro de paciente correctamente almacenado que permita identificarlo y relacionarlo con sus órdenes y resultados.
+
+---
+
+### Gestión de órdenes
+
+**Objetivo:**
+Permitir al personal de recepción registrar y gestionar las órdenes correspondientes a los estudios solicitados por cada paciente.
+
+**Actor/es involucrado/s:**
+
+* Actor principal: Administrativo / Recepción.
+* Entidades relacionadas: Paciente, Obra Social, Estudio.
+
+**Funcionalidades principales:**
+
+* Registrar una nueva orden.
+* Asociar la orden a un paciente.
+* Registrar los estudios solicitados.
+* Registrar la obra social del paciente como dato asociado a la orden.
+* Generar un código de orden.
+* Consultar una orden.
+* Gestionar el estado de la orden.
+
+**Datos involucrados:**
+
+* Paciente.
+* Orden.
+* Estudio.
+* Obra social.
+* Estado de la orden.
+* Fecha de la orden.
+
+**Reglas de negocio:**
+
+* Una orden debe estar asociada a un paciente.
+* Una orden debe contener uno o más estudios.
+* La obra social se registra solo como dato (sin facturación): el paciente guarda su cobertura actual y la orden conserva la cobertura utilizada en ese momento.
+* La orden atraviesa los estados definidos por el sistema: `En proceso → Listo → Entregado`.
+
+**Interacción con otros módulos:**
+
+* Se relaciona con **Gestión de pacientes** para identificar al paciente asociado a la orden.
+* Se relaciona con **Administración de estudios** para seleccionar los estudios solicitados.
+* Se relaciona con **Gestión de resultados** para asociar los resultados correspondientes a los estudios de la orden.
+* Se relaciona con **Notificaciones** cuando la orden pasa al estado `Listo`.
+
+**Resultado esperado:**
+Una orden correctamente registrada, asociada a un paciente y a los estudios solicitados, con un código que permita posteriormente consultar su estado y resultados.
 
 ---
 
@@ -171,7 +176,7 @@ Permitir al profesional del laboratorio cargar y gestionar los resultados corres
 * Seleccionar una orden para cargar sus resultados.
 * Registrar el valor obtenido para cada analito.
 * Registrar la unidad correspondiente.
-* Consultar el rango de referencia del analito.
+* Consultar el rango de referencia del analito que corresponde al paciente (según su sexo y edad).
 * Identificar automáticamente valores fuera del rango de referencia.
 * Finalizar la carga de resultados.
 * Actualizar el estado de la orden cuando los resultados estén disponibles.
@@ -277,6 +282,7 @@ Permitir al paciente consultar los resultados de estudios realizados anteriormen
 * Visualizar las órdenes anteriores.
 * Consultar los resultados asociados a una orden anterior.
 * Consultar los estudios realizados en cada orden.
+* Visualizar la evolución de un analito a lo largo del tiempo, comparando el resultado actual con los anteriores.
 
 **Datos involucrados:**
 
@@ -294,6 +300,7 @@ Permitir al paciente consultar los resultados de estudios realizados anteriormen
 * El historial debe contener únicamente información correspondiente al paciente autenticado/identificado.
 * Los resultados deben mantenerse asociados a la orden en la que fueron realizados.
 * Cada resultado debe conservar la información necesaria para su interpretación, incluyendo valor, unidad y rango de referencia.
+* La representación gráfica de la evolución queda como funcionalidad opcional (*nice to have*).
 
 **Interacción con otros módulos:**
 

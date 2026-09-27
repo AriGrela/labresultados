@@ -49,7 +49,7 @@ Permitir al personal de recepción registrar y gestionar las órdenes correspond
 
 * Una orden debe estar asociada a un paciente.
 * Una orden debe contener uno o más estudios.
-* La obra social se registra únicamente como dato asociado al paciente/orden.
+* La obra social se registra solo como dato (sin facturación): el paciente guarda su cobertura actual y la orden conserva la cobertura utilizada en ese momento.
 * La orden atraviesa los estados definidos por el sistema: `En proceso → Listo → Entregado`.
 
 **Interacción con otros módulos:**
@@ -132,6 +132,8 @@ Permitir al personal de recepción registrar y consultar los datos necesarios de
 * Paciente.
 * Nombre y apellido.
 * DNI.
+* Sexo.
+* Fecha de nacimiento.
 * Datos de contacto.
 * Obra social.
 * Órdenes asociadas.
@@ -140,7 +142,8 @@ Permitir al personal de recepción registrar y consultar los datos necesarios de
 
 * Un paciente puede tener una o más órdenes.
 * Los datos del paciente deben permitir identificarlo de forma inequívoca.
-* La obra social se registra como dato del paciente y no implica funcionalidades de facturación.
+* La obra social registrada en el paciente es su cobertura actual y no implica funcionalidades de facturación.
+* El sexo y la fecha de nacimiento se utilizan para determinar el rango de referencia que corresponde a cada resultado.
 
 **Interacción con otros módulos:**
 
@@ -171,7 +174,7 @@ Permitir al profesional del laboratorio cargar y gestionar los resultados corres
 * Seleccionar una orden para cargar sus resultados.
 * Registrar el valor obtenido para cada analito.
 * Registrar la unidad correspondiente.
-* Consultar el rango de referencia del analito.
+* Consultar el rango de referencia del analito que corresponde al paciente (según su sexo y edad).
 * Identificar automáticamente valores fuera del rango de referencia.
 * Finalizar la carga de resultados.
 * Actualizar el estado de la orden cuando los resultados estén disponibles.

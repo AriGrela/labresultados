@@ -15,6 +15,12 @@
 | **[**Notificaciones**](#notificaciones)**              | Sistema         | Avisar al paciente cuando sus resultados estén disponibles         |
 | **[**Administración de estudios**](#administración-de-estudios)**  | Administrador del laboratorio  | Configurar estudios, analitos y rangos de referencia               |
 
+## Cómo leer cada módulo
+
+- **Actor principal:** el usuario para el que existe el módulo; es quien inicia y usa sus funcionalidades centrales. En *Notificaciones* es el propio sistema, que actúa solo.
+- **Actores secundarios:** otros usuarios que usan alguna funcionalidad del módulo o reciben su resultado, sin ser su destinatario principal.
+- **Entidades relacionadas:** los datos del sistema (tablas de la base de datos) con los que trabaja el módulo. No son personas.
+
 ---
 
 ### Gestión de usuarios y roles
@@ -23,10 +29,15 @@
 
 Permitir al administrador del laboratorio gestionar los usuarios internos del sistema y los roles que determinan sus permisos de acceso.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Administrador del laboratorio.
-* Actores relacionados: Recepción, Profesional (Bioquímico).
+* Principal: Administrador del laboratorio.
+* Secundarios:
+  * Recepción y Profesional (Bioquímico).
+
+**Entidades relacionadas:**
+
+* Usuario, Rol.
 
 **Funcionalidades principales:**
 
@@ -68,10 +79,15 @@ Un conjunto de usuarios internos correctamente registrados y asociados a un rol 
 
 Permitir al personal de recepción registrar y consultar los datos necesarios de los pacientes que utilizan los servicios del laboratorio.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Recepción.
-* Entidades relacionadas: Obra Social, Orden.
+* Principal: Recepción.
+* Secundarios:
+  * Profesional (Bioquímico), que consulta el sexo y la edad del paciente para interpretar los resultados.
+
+**Entidades relacionadas:**
+
+* Paciente, Orden.
 
 **Funcionalidades principales:**
 
@@ -116,10 +132,16 @@ Un registro de paciente correctamente almacenado que permita identificarlo y rel
 **Objetivo:**
 Permitir al personal de recepción registrar y gestionar las órdenes correspondientes a los estudios solicitados por cada paciente.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Administrativo / Recepción.
-* Entidades relacionadas: Paciente, Obra Social, Estudio.
+* Principal: Recepción.
+* Secundarios:
+  * Profesional (Bioquímico), que consulta las órdenes pendientes de carga.
+  * Paciente, cuya consulta online marca la orden como entregada.
+
+**Entidades relacionadas:**
+
+* Orden, Paciente, Estudio, Obra social.
 
 **Funcionalidades principales:**
 
@@ -171,10 +193,14 @@ Una orden correctamente registrada, asociada a un paciente y a los estudios soli
 
 Permitir al profesional del laboratorio cargar y gestionar los resultados correspondientes a los estudios incluidos en una orden.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Profesional (Bioquímico).
-* Entidades relacionadas: Orden, Estudio, Analito.
+* Principal: Profesional (Bioquímico).
+* Secundarios: ninguno.
+
+**Entidades relacionadas:**
+
+* Orden, Estudio, Analito, Rango de referencia, Resultado.
 
 **Funcionalidades principales:**
 
@@ -225,10 +251,14 @@ Una orden con sus resultados correctamente registrados y asociados a los estudio
 
 Permitir al paciente consultar el estado de su orden y acceder a sus resultados cuando estos se encuentren disponibles, sin requerir intervención del personal del laboratorio.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Paciente.
-* Entidades relacionadas: Orden, Resultado.
+* Principal: Paciente.
+* Secundarios: ninguno.
+
+**Entidades relacionadas:**
+
+* Paciente, Orden, Resultado.
 
 **Funcionalidades principales:**
 
@@ -278,10 +308,14 @@ El paciente puede conocer el estado de su orden y, cuando los resultados están 
 
 Permitir al paciente consultar los resultados de estudios realizados anteriormente y disponer de un historial asociado a sus órdenes.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Paciente.
-* Entidades relacionadas: Paciente, Orden, Resultado, Estudio.
+* Principal: Paciente.
+* Secundarios: ninguno.
+
+**Entidades relacionadas:**
+
+* Paciente, Orden, Estudio, Analito, Resultado.
 
 **Funcionalidades principales:**
 
@@ -328,10 +362,16 @@ El paciente puede consultar sus resultados anteriores y visualizar la evolución
 
 Informar al paciente cuando los resultados correspondientes a su orden se encuentren disponibles.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Sistema.
-* Actor secundario: Paciente.
+* Principal: Sistema (una tarea programada que envía los avisos).
+* Secundarios:
+  * Paciente, que recibe el aviso.
+  * Recepción, que ve los avisos que no se pudieron enviar.
+
+**Entidades relacionadas:**
+
+* Notificación, Orden, Paciente.
 
 **Funcionalidades principales:**
 
@@ -372,10 +412,15 @@ El paciente recibe un aviso por correo electrónico cuando sus resultados están
 
 Permitir al administrador del laboratorio configurar los estudios, analitos y rangos de referencia utilizados por el sistema.
 
-**Actor/es involucrado/s:**
+**Actores:**
 
-* Actor principal: Administrador del laboratorio.
-* Entidades relacionadas: Estudio, Analito, Rango de referencia.
+* Principal: Administrador del laboratorio.
+* Secundarios:
+  * Recepción y Profesional (Bioquímico), que consultan el catálogo de estudios.
+
+**Entidades relacionadas:**
+
+* Estudio, Analito, Rango de referencia.
 
 **Funcionalidades principales:**
 

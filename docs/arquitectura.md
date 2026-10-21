@@ -97,8 +97,32 @@ Cada paquete repite la misma estructura interna que `usuarios/` (controller, ser
 ### Reglas de convivencia entre módulos
 
 - Un módulo **no accede a los repositorios de otro**: si necesita algo, llama a su **servicio**. Ej.: `ResultadoService` le pide a `OrdenService` que cambie el estado de la orden.
-- Cuando una orden pasa a `LISTO`, el módulo de órdenes le pide a `NotificacionService` que genere el aviso.
+- Cuando una orden pasa a `LISTO`, el módulo de órdenes le pide a `NotificacionService` que **registre** el aviso. El envío se hace después y por separado (ver *Notificaciones*).
 - Lo transversal (seguridad, errores, configuración) vive en `comun/`.
+
+### Notificaciones: envío asíncrono con reintentos
+
+El envío del email **no es síncrono**: pasar una orden a `LISTO` no espera a que el email salga. Si el proveedor de email está lento o caído, la orden igual queda `LISTO` y no se pierde el aviso.
+
+1. Al pasar la orden a `LISTO`, en la misma transacción se crea el aviso en la tabla `notificacion`, en estado `PENDIENTE`.
+2. Una **tarea programada** del backend (`@Scheduled`, cada 5 minutos) toma los avisos `PENDIENTE` y los envía.
+3. Si el envío funciona, el aviso pasa a `ENVIADA`. Si falla, la tarea suma un intento, guarda el error y lo deja `PENDIENTE` para reintentarlo más tarde: espera 5 minutos antes del 2.º intento y 10 antes del 3.º.
+4. Si falla el 3.er intento, pasa a `FALLIDA` y aparece en el panel de la recepción, que avisa al paciente por otro medio (por ejemplo, por teléfono).
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> PENDIENTE : la orden pasa a LISTO
+    PENDIENTE --> ENVIADA : el envío funciona
+    PENDIENTE --> PENDIENTE : falla (intento 1 o 2)
+    PENDIENTE --> FALLIDA : falla el intento 3
+    ENVIADA --> [*]
+    FALLIDA --> [*] : la recepción avisa por otro medio
+```
+
+**Quién reintenta y cuándo:** lo hace el propio sistema, con la tarea programada, sin intervención de nadie. Una persona solo interviene cuando se agotan los intentos.
+
+Los **enlaces de acceso** del paciente (ver 4.2) son la excepción: se envían en el momento, porque el paciente los está esperando. Si ese envío falla, el paciente puede volver a pedirlo.
 
 ## 4. Seguridad: autenticación y autorización
 

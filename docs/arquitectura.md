@@ -100,20 +100,68 @@ Cada paquete repite la misma estructura interna que `usuarios/` (controller, ser
 - Cuando una orden pasa a `LISTO`, el módulo de órdenes le pide a `NotificacionService` que genere el aviso.
 - Lo transversal (seguridad, errores, configuración) vive en `comun/`.
 
-### Seguridad
+## 4. Seguridad: autenticación y autorización
 
-- **Personal del laboratorio**: inicio de sesión con email y contraseña (guardada como hash BCrypt) con Spring Security. Cada endpoint se habilita según el rol: `ADMINISTRADOR`, `RECEPCION` o `BIOQUIMICO`.
-- **Paciente**: accede sin cuenta, con **código de orden + DNI**, y solo puede ver esa orden y su propio historial (ver *Protección de datos y marco legal* en la propuesta).
+### 4.1 Personal del laboratorio
 
-## 4. Organización del frontend
+Inicio de sesión con email y contraseña (guardada como hash BCrypt) con Spring Security. Cada endpoint se habilita según el rol: `ADMINISTRADOR`, `RECEPCION` o `BIOQUIMICO`.
+
+### 4.2 Paciente: enlace de acceso temporal por email
+
+El paciente no tiene usuario ni contraseña. Para entrar al portal **pide un enlace** con su DNI y el código de su orden (figura en el comprobante que le da la recepción), y el sistema se lo envía **al email que tiene registrado**:
+
+```mermaid
+sequenceDiagram
+    actor P as Paciente
+    participant F as Frontend
+    participant A as API (Spring Boot)
+    participant DB as PostgreSQL
+    participant E as Proveedor de email
+    P->>F: Ingresa DNI + código de orden
+    F->>A: POST /api/portal/acceso
+    A->>DB: ¿La orden es de ese DNI? ¿Superó el límite de pedidos?
+    A->>DB: Guarda el hash del token (vence en 15 min)
+    A->>E: Envía el enlace con el token
+    A-->>F: "Si los datos son correctos, te enviamos un enlace"
+    E-->>P: Email con el enlace
+    P->>F: Abre el enlace
+    F->>A: POST /api/portal/sesion (token)
+    A->>DB: Valida: el hash existe, no se usó y no venció → lo marca usado
+    A-->>F: Sesión del paciente (JWT, 30 min)
+```
+
+El token es un valor aleatorio de 256 bits. En la base se guarda **solo su hash** (tabla `token_acceso`), así que aunque alguien leyera la tabla no podría usar los enlaces.
+
+**Protecciones contra el acceso indebido y la fuerza bruta:**
+
+| Riesgo | Protección |
+| --- | --- |
+| Alguien adivina o conoce el DNI y el código de una orden | Con eso solo puede *pedir* un enlace, que llega al **email del paciente**: hace falta tener acceso a ese correo para entrar. |
+| Probar códigos o tokens al azar (fuerza bruta) | El token tiene 256 bits: es imposible de adivinar. Además se limita la cantidad de pedidos: máximo 3 enlaces por paciente cada 15 minutos, y un tope por IP. |
+| Un enlace viejo que queda en la bandeja de entrada | El token es de **un solo uso** y **vence a los 15 minutos**. No persiste: la sesión que genera dura 30 minutos y después hay que pedir otro enlace. |
+| Averiguar qué DNI son pacientes del laboratorio | El sistema responde siempre el mismo mensaje genérico (*"si los datos son correctos, te enviamos un enlace"*), exista o no el paciente. |
+| Interceptar el enlace o la sesión | Todo el tráfico va por HTTPS. |
+
+Requisito: el paciente tiene que tener un email registrado. Si no tiene, retira sus resultados en el mostrador.
+
+### 4.3 Qué ve el paciente con su sesión
+
+**Decisión:** una vez que entra, el paciente ve **todas sus órdenes y su historial completo**, no solo la orden con la que pidió el enlace.
+
+**Justificación:** el código de orden ya no es la llave de acceso; solo sirve para *pedir* el enlace. Lo que identifica al paciente es haber abierto el enlace que llegó a **su propio email**, por eso la sesión representa al paciente y no a una orden. Ver el historial completo es lo que permite comparar con resultados anteriores, que es parte central de la propuesta.
+
+El paciente nunca puede ver datos de otro: el backend toma su `paciente_id` de la sesión y filtra todas las consultas por él. No usa identificadores que mande el frontend.
+
+## 5. Organización del frontend
 
 Frontend en HTML, CSS y JavaScript, sin framework, organizado **por pantallas según el actor** que las usa. Toda la comunicación con el backend pasa por un único archivo (`api.js`).
 
 ```
 frontend/
-├── index.html              → acceso del paciente (código de orden + DNI)
+├── index.html              → el paciente pide su enlace de acceso (DNI + código de orden)
 ├── paciente/
-│   ├── orden.html          → estado y resultados de la orden
+│   ├── acceso.html         → abre el enlace del email y crea la sesión
+│   ├── ordenes.html        → sus órdenes, estado y resultados
 │   └── historial.html      → resultados anteriores y evolución
 ├── personal/
 │   ├── login.html
@@ -122,12 +170,12 @@ frontend/
 │   └── admin/              → usuarios y estudios
 ├── js/
 │   ├── api.js              → único punto de llamadas a la API REST (fetch)
-│   ├── auth.js             → sesión del personal
+│   ├── auth.js             → sesión del personal y del paciente
 │   └── ...                 → un archivo por pantalla
 └── css/
 ```
 
-## 5. Resumen: de cada módulo a su código y sus tablas
+## 6. Resumen: de cada módulo a su código y sus tablas
 
 | Módulo | Paquete backend | Pantallas frontend | Tablas |
 | --- | --- | --- | --- |
@@ -135,7 +183,7 @@ frontend/
 | Gestión de pacientes | `pacientes` | `personal/recepcion` | `paciente`, `obra_social` |
 | Gestión de órdenes | `ordenes` | `personal/recepcion` | `orden`, `orden_estudio` |
 | Gestión de resultados | `resultados` | `personal/bioquimico` | `resultado` |
-| Consulta de resultados | `consulta` | `index.html`, `paciente/orden.html` | `vista_historial_resultados` |
+| Consulta de resultados | `consulta` | `paciente/ordenes.html` | `vista_historial_resultados` |
 | Historial de resultados | `historial` | `paciente/historial.html` | `vista_historial_resultados` |
 | Notificaciones | `notificaciones` | — (lo dispara el sistema) | `notificacion` |
 | Administración de estudios | `estudios` | `personal/admin` | `estudio`, `analito`, `rango_referencia` |

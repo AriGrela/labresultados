@@ -76,7 +76,7 @@ El servicio es quien convierte entre unos y otros: recibe un DTO del controller,
 ```
 backend/src/main/java/ar/edu/utn/labresultados/
 ├── LabResultadosApplication.java
-├── usuarios/          → Gestión de usuarios y roles
+├── usuarios/          → Gestión de usuarios y acceso
 │   ├── UsuarioController.java
 │   ├── UsuarioService.java
 │   ├── UsuarioRepository.java
@@ -260,7 +260,7 @@ frontend/
 
 | Módulo | Paquete backend | Pantallas frontend | Tablas |
 | --- | --- | --- | --- |
-| Gestión de usuarios y roles | `usuarios` | `personal/admin` | `usuario`, `rol` |
+| Gestión de usuarios y acceso | `usuarios` | `index.html`, `paciente/acceso.html`, `personal/login.html`, `personal/admin` | `usuario`, `rol`, `token_acceso` |
 | Gestión de pacientes | `pacientes` | `personal/recepcion` | `paciente`, `obra_social` |
 | Gestión de órdenes | `ordenes` | `personal/recepcion` | `orden`, `orden_estudio` |
 | Gestión de resultados | `resultados` | `personal/bioquimico` | `resultado` |

@@ -6,7 +6,7 @@
 
 | Módulo                          | Actor principal | Propósito                                                          |
 | ------------------------------- | --------------- | ------------------------------------------------------------------ |
-| **[**Gestión de usuarios y roles**](#gestión-de-usuarios-y-roles)** | Administrador del laboratorio   | Gestionar los usuarios internos y sus permisos                     |
+| **[**Gestión de usuarios y acceso**](#gestión-de-usuarios-y-acceso)** | Todos (personal y paciente) | Controlar el ingreso al sistema y gestionar los usuarios internos y sus roles |
 | **[**Gestión de pacientes**](#gestión-de-pacientes)**        | Recepción       | Registrar y consultar los datos del paciente                       |
 | **[**Gestión de órdenes**](#gestión-de-órdenes)**          | Recepción       | Registrar estudios solicitados y administrar el estado de la orden |
 | **[**Gestión de resultados**](#gestión-de-resultados)**       | Profesional (Bioquímico)      | Cargar los resultados de los estudios                              |
@@ -23,54 +23,54 @@
 
 ---
 
-### Gestión de usuarios y roles
+### Gestión de usuarios y acceso
 
 **Objetivo:**
 
-Permitir al administrador del laboratorio gestionar los usuarios internos del sistema y los roles que determinan sus permisos de acceso.
+Controlar el ingreso al sistema de **todos** sus usuarios (el personal del laboratorio con usuario y contraseña, y el paciente con un enlace temporal por email) y permitir al administrador gestionar los usuarios internos y sus roles.
 
 **Actores:**
 
-* Principal: Administrador del laboratorio.
-* Secundarios:
-  * Recepción y Profesional (Bioquímico).
+* Principal: todos los usuarios del sistema, que lo usan para ingresar: Administrador del laboratorio, Recepción, Profesional (Bioquímico) y Paciente. El Administrador, además, gestiona los usuarios internos y sus roles.
+* Secundarios: ninguno.
 
 **Entidades relacionadas:**
 
-* Usuario, Rol.
+* Usuario, Rol, Token de acceso, Paciente, Orden.
 
 **Funcionalidades principales:**
 
-* Registrar un nuevo usuario interno.
-* Consultar usuarios registrados.
-* Modificar los datos de un usuario.
-* Asignar un rol a un usuario.
-* Gestionar el acceso de los usuarios al sistema.
+* Iniciar y cerrar sesión con email y contraseña (personal).
+* Cambiar la propia contraseña (personal).
+* Solicitar un enlace de acceso al portal con DNI y código de orden (paciente).
+* Ingresar al portal con el enlace recibido por email (paciente).
+* Registrar, consultar y modificar usuarios internos, asignarles un rol y darlos de baja (administrador).
+* Controlar qué funcionalidades puede usar cada rol (autorización).
 
 **Datos involucrados:**
 
-* Usuario.
-* Nombre y datos identificatorios.
-* Credenciales de acceso.
+* Usuario: nombre, email, credenciales (hash de la contraseña), rol y estado.
 * Rol.
-* Estado del usuario.
+* Token de acceso del paciente: hash, vencimiento y fecha de uso.
 
 **Reglas de negocio:**
 
-* Los usuarios internos deben tener un rol asignado.
-* Los roles determinan las funcionalidades a las que puede acceder cada usuario.
-* Los roles contemplados son: Administrador, Recepción y Profesional (Bioquímico).
+* Todo usuario interno tiene un rol: Administrador, Recepción o Profesional (Bioquímico). El rol determina qué funcionalidades puede usar (ver la tabla de autorización en [Arquitectura](arquitectura.md)).
+* Solo el Administrador da de alta usuarios internos y les asigna un rol.
+* Un usuario dado de baja no puede iniciar sesión.
+* El paciente no tiene contraseña: ingresa con un enlace de un solo uso, que vence a los 15 minutos y llega a su email registrado.
+* El enlace solo se envía si el DNI y el código de orden corresponden al mismo paciente. La respuesta es siempre la misma, existan o no esos datos.
+* Un paciente puede pedir como máximo 3 enlaces cada 15 minutos.
 
 **Interacción con otros módulos:**
 
-* Se relaciona con **Gestión de órdenes** para controlar las operaciones disponibles para el personal de recepción.
-* Se relaciona con **Gestión de resultados** para controlar las operaciones disponibles para el profesional.
-* Se relaciona con **Administración de estudios** para controlar las operaciones disponibles para el administrador.
+* Se relaciona con **todos los módulos**: identifica a quien los usa y controla qué puede hacer según su rol.
+* Se relaciona con **Gestión de pacientes** y **Gestión de órdenes** para verificar el DNI y el código de orden antes de enviar el enlace.
+* Se relaciona con **Consulta de resultados** e **Historial de resultados**, que usan la sesión del paciente para mostrarle solo su propia información.
 
 **Resultado esperado:**
 
-Un conjunto de usuarios internos correctamente registrados y asociados a un rol que permita controlar su acceso a las funcionalidades del sistema.
-
+Cada usuario ingresa al sistema de forma segura y accede solo a lo que le corresponde: el personal, según su rol; el paciente, únicamente a su propia información.
 ---
 
 ### Gestión de pacientes

@@ -262,17 +262,14 @@ Permitir al paciente consultar el estado de su orden y acceder a sus resultados 
 
 **Funcionalidades principales:**
 
-* Ingresar el código de orden y/o DNI.
-* Consultar el estado de una orden.
+* Consultar sus órdenes y el estado de cada una, una vez que ingresó al portal con su enlace de acceso.
 * Visualizar los resultados disponibles.
 * Identificar los valores fuera del rango de referencia.
 * Acceder a la información correspondiente a los estudios realizados.
 
 **Datos involucrados:**
 
-* Paciente.
-* DNI.
-* Código de orden.
+* Paciente (identificado por su sesión).
 * Orden.
 * Estudio.
 * Resultado.
@@ -283,7 +280,8 @@ Permitir al paciente consultar el estado de su orden y acceder a sus resultados 
 
 **Reglas de negocio:**
 
-* El paciente únicamente debe poder acceder a la información correspondiente a su propia orden.
+* El paciente debe estar autenticado con su enlace de acceso (ver **Gestión de usuarios y acceso**).
+* El paciente únicamente puede acceder a la información de sus propias órdenes: el sistema identifica al paciente por su sesión, no por datos que él ingrese.
 * Los resultados deben estar disponibles para su consulta cuando la orden se encuentre en estado `Listo`.
 * La primera vez que el paciente ve los resultados de una orden en estado `Listo`, la orden pasa automáticamente a `Entregado` (medio portal).
 * Los valores fuera del rango de referencia deben visualizarse diferenciados.
@@ -291,7 +289,7 @@ Permitir al paciente consultar el estado de su orden y acceder a sus resultados 
 
 **Interacción con otros módulos:**
 
-* Se relaciona con **Gestión de pacientes** para identificar al paciente.
+* Se relaciona con **Gestión de usuarios y acceso**, que autentica al paciente y le da su sesión.
 * Se relaciona con **Gestión de órdenes** para consultar el estado de la orden y registrar su entrega por el portal.
 * Se relaciona con **Gestión de resultados** para obtener los resultados disponibles.
 * Se relaciona con **Historial de resultados** para consultar resultados anteriores.
@@ -338,14 +336,14 @@ Permitir al paciente consultar los resultados de estudios realizados anteriormen
 
 **Reglas de negocio:**
 
-* El historial debe contener únicamente información correspondiente al paciente autenticado/identificado.
+* El historial contiene únicamente información del paciente autenticado con su enlace de acceso (ver **Gestión de usuarios y acceso**): el sistema lo identifica por su sesión.
 * Los resultados deben mantenerse asociados a la orden en la que fueron realizados.
 * Cada resultado debe conservar la información necesaria para su interpretación, incluyendo valor, unidad y rango de referencia.
 * La representación gráfica de la evolución queda como funcionalidad opcional (*nice to have*).
 
 **Interacción con otros módulos:**
 
-* Se relaciona con **Gestión de pacientes** para identificar al paciente.
+* Se relaciona con **Gestión de usuarios y acceso**, que autentica al paciente y le da su sesión.
 * Se relaciona con **Gestión de órdenes** para obtener las órdenes anteriores.
 * Se relaciona con **Gestión de resultados** para obtener los resultados asociados a cada orden.
 * Forma parte de la consulta realizada desde **Consulta de resultados**.

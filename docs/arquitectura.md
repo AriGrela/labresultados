@@ -15,7 +15,8 @@ flowchart LR
     subgraph B [Backend]
         A["API REST<br/>Java + Spring Boot"] -- "JPA / Hibernate" --> D[("PostgreSQL")]
     end
-    A -- "SMTP" --> M([Email del paciente])
+    A -- "SMTP" --> E["Proveedor de email<br/>(Brevo)"]
+    E --> M([Email del paciente])
 ```
 
 En desarrollo, el backend y la base se levantan con Docker Compose. Para el MVP en la nube: frontend estático (Vercel o Netlify), backend en Render y base de datos en Supabase.
@@ -123,6 +124,24 @@ stateDiagram-v2
 **Quién reintenta y cuándo:** lo hace el propio sistema, con la tarea programada, sin intervención de nadie. Una persona solo interviene cuando se agotan los intentos.
 
 Los **enlaces de acceso** del paciente (ver 4.2) son la excepción: se envían en el momento, porque el paciente los está esperando. Si ese envío falla, el paciente puede volver a pedirlo.
+
+### Proveedor de email: dependencia externa
+
+Sí, el sistema depende de un servicio externo para enviar emails: los avisos de resultados y los enlaces de acceso del paciente.
+
+- **Proveedor elegido:** [Brevo](https://www.brevo.com/) (ex Sendinblue), conectado por **SMTP** con Spring Boot Mail (`spring-boot-starter-mail`). No usamos librerías propias del proveedor.
+- **Límite del plan gratuito:** alrededor de 300 emails por día (valor vigente al momento de esta revisión; se verifica al configurar la cuenta).
+- **Volumen estimado:** con 20 a 25 pacientes por día, son unos 25 avisos de resultados más 25 a 50 enlaces de acceso: **hasta 75 emails diarios**, alrededor de un 25 % del límite.
+- **Alternativa:** Resend, que también tiene plan gratuito pero con un límite diario menor.
+
+| Riesgo | Mitigación |
+| --- | --- |
+| El proveedor está caído o se alcanzó el límite del día | Los avisos quedan `PENDIENTE` y se reintentan; si se agotan los intentos, la recepción avisa por otro medio. |
+| El paciente no recibe su enlace de acceso | Puede volver a pedirlo más tarde o retirar los resultados en el mostrador. |
+| Hay que cambiar de proveedor (precio, límites, calidad) | Al usar SMTP estándar, alcanza con cambiar el servidor, el usuario y la clave en la configuración, sin tocar el código. |
+| Se filtran las credenciales SMTP | Se guardan como variables de entorno del servidor, nunca en el repositorio. |
+
+En desarrollo se usa **Mailpit** dentro de Docker Compose: captura los emails localmente para probarlos sin enviarlos de verdad.
 
 ## 4. Seguridad: autenticación y autorización
 

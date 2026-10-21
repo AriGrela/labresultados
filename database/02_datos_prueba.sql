@@ -38,19 +38,10 @@ JOIN rol r ON r.nombre = v.rol;
 INSERT INTO obra_social (nombre) VALUES
     ('OSDE'), ('Swiss Medical'), ('IOMA'), ('PAMI'), ('Galeno');
 
--- María cambió de OSDE a Swiss Medical este año: su cobertura ACTUAL es
--- Swiss Medical, pero sus órdenes viejas conservan OSDE (ver órdenes).
--- Alex no tiene cobertura (particular).
-INSERT INTO paciente (obra_social_id, dni, nombre, apellido, fecha_nacimiento,
-                      sexo, email, telefono, nro_afiliado)
-SELECT os.id, v.dni, v.nombre, v.apellido, v.nacimiento::date,
-       v.sexo, v.email, v.telefono, v.afiliado
-FROM (VALUES
-    ('Swiss Medical', '28456789', 'María', 'González', '1980-03-14', 'F', 'maria.gonzalez@example.com', '11 4567-8901',  'SM-552310'),
-    ('IOMA',          '33987654', 'Juan',  'Pérez',    '1988-11-02', 'M', 'juan.perez@example.com',     '221 456-7890', 'IO-8831204'),
-    (NULL,            '40123456', 'Alex',  'Romero',   '1997-07-21', 'X', 'alex.romero@example.com',    NULL,           NULL)
-) AS v(obra_social, dni, nombre, apellido, nacimiento, sexo, email, telefono, afiliado)
-LEFT JOIN obra_social os ON os.nombre = v.obra_social;
+INSERT INTO paciente (dni, nombre, apellido, fecha_nacimiento, sexo, email, telefono) VALUES
+    ('28456789', 'María', 'González', '1980-03-14', 'F', 'maria.gonzalez@example.com', '11 4567-8901'),
+    ('33987654', 'Juan',  'Pérez',    '1988-11-02', 'M', 'juan.perez@example.com',     '221 456-7890'),
+    ('40123456', 'Alex',  'Romero',   '1997-07-21', 'X', 'alex.romero@example.com',    NULL);
 
 -- ---------------------------------------------------------------------
 -- Catálogo: estudios, analitos y rangos de referencia
@@ -103,23 +94,26 @@ JOIN analito a ON a.nombre = v.analito;
 
 -- ---------------------------------------------------------------------
 -- Órdenes y estudios pedidos
+-- Cada orden registra la cobertura presentada ese día: María pasó de
+-- OSDE a Swiss Medical; Alex se atiende como particular.
 -- Los códigos son aleatorios (no correlativos) para que no se puedan
 -- adivinar: el paciente accede con código + DNI (protección de datos).
 -- ---------------------------------------------------------------------
-INSERT INTO orden (codigo, paciente_id, obra_social_id, creada_por, estado,
-                   fecha_creacion, fecha_listo, fecha_entrega)
-SELECT v.codigo, p.id, os.id, u.id, v.estado,
-       v.creada::timestamptz, v.listo::timestamptz, v.entregada::timestamptz
+INSERT INTO orden (codigo, paciente_id, obra_social_id, nro_afiliado, creada_por, estado,
+                   fecha_creacion, fecha_listo, fecha_entrega, medio_entrega)
+SELECT v.codigo, p.id, os.id, v.afiliado, u.id, v.estado,
+       v.creada::timestamptz, v.listo::timestamptz, v.entregada::timestamptz, v.medio
 FROM (VALUES
-    -- María: tres órdenes a lo largo de un año (sirven para ver su historial)
-    ('LR-4F7K2Q', '28456789', 'OSDE',          'ENTREGADO',  '2025-09-15 08:10-03', '2025-09-16 17:30-03', '2025-09-18 10:05-03'),
-    ('LR-9XH3MB', '28456789', 'OSDE',          'ENTREGADO',  '2026-03-10 07:45-03', '2026-03-11 16:20-03', '2026-03-12 09:40-03'),
-    ('LR-C82NTE', '28456789', 'Swiss Medical', 'LISTO',      '2026-09-22 08:05-03', '2026-09-23 18:00-03', NULL),
+    -- María: tres órdenes a lo largo de un año (sirven para ver su historial).
+    -- La primera la vio en el portal; la segunda la retiró en el mostrador.
+    ('LR-4F7K2Q', '28456789', 'OSDE',          'OS-0417733',  'ENTREGADO',  '2025-09-15 08:10-03', '2025-09-16 17:30-03', '2025-09-18 10:05-03', 'PORTAL'),
+    ('LR-9XH3MB', '28456789', 'OSDE',          'OS-0417733',  'ENTREGADO',  '2026-03-10 07:45-03', '2026-03-11 16:20-03', '2026-03-12 09:40-03', 'MOSTRADOR'),
+    ('LR-C82NTE', '28456789', 'Swiss Medical', 'SM-552310',   'LISTO',      '2026-09-22 08:05-03', '2026-09-23 18:00-03', NULL,                  NULL),
     -- Juan: orden del día, todavía en proceso (el paciente aún no ve resultados)
-    ('LR-P5WQ7D', '33987654', 'IOMA',          'EN_PROCESO', '2026-09-25 07:30-03', NULL,                  NULL),
+    ('LR-P5WQ7D', '33987654', 'IOMA',          'IO-8831204',  'EN_PROCESO', '2026-09-25 07:30-03', NULL,                  NULL,                  NULL),
     -- Alex: particular, sin obra social
-    ('LR-M2Z8RA', '40123456', NULL,            'ENTREGADO',  '2026-09-18 08:20-03', '2026-09-19 15:10-03', '2026-09-21 11:00-03')
-) AS v(codigo, dni, obra_social, estado, creada, listo, entregada)
+    ('LR-M2Z8RA', '40123456', NULL,            NULL,          'ENTREGADO',  '2026-09-18 08:20-03', '2026-09-19 15:10-03', '2026-09-21 11:00-03', 'PORTAL')
+) AS v(codigo, dni, obra_social, afiliado, estado, creada, listo, entregada, medio)
 JOIN paciente p          ON p.dni = v.dni
 LEFT JOIN obra_social os ON os.nombre = v.obra_social
 JOIN usuario u           ON u.email = 'recepcion@labresultados.test';
@@ -159,7 +153,7 @@ FROM (VALUES
     ('LR-4F7K2Q', 'Triglicéridos',     140, '2025-09-16 11:00-03'),
     ('LR-9XH3MB', 'Glucosa',           112, '2026-03-11 10:30-03'),
     ('LR-C82NTE', 'Glucosa',           126, '2026-09-23 12:15-03'),
-    ('LR-C82NTE', 'Hemoglobina',      11.4, '2026-09-23 12:15-03'),
+    ('LR-C82NTE', 'Hemoglobina',      11.2, '2026-09-23 12:15-03'),  -- se corrige abajo
     ('LR-C82NTE', 'Hematocrito',        37, '2026-09-23 12:15-03'),
     ('LR-C82NTE', 'Leucocitos',       7200, '2026-09-23 12:15-03'),
     ('LR-P5WQ7D', 'Creatinina',        1.1, '2026-09-26 09:40-03'),  -- falta la urea: sigue EN_PROCESO
@@ -177,16 +171,60 @@ LEFT JOIN rango_referencia rr
       AND (rr.edad_max IS NULL OR extract(year FROM age(o.fecha_creacion, p.fecha_nacimiento)) <= rr.edad_max);
 
 -- ---------------------------------------------------------------------
--- Notificaciones (una orden puede tener varios intentos de aviso)
+-- Corrección de un resultado (queda auditada)
+-- La hemoglobina de María se cargó como 11.2 por un error de tipeo; la
+-- bioquímica la corrige a 11.4. El servicio hace las dos cosas juntas:
+-- registra la corrección y actualiza el valor.
 -- ---------------------------------------------------------------------
-INSERT INTO notificacion (orden_id, email_destino, estado, fecha_creacion, fecha_envio, detalle)
-SELECT o.id, p.email, v.estado, v.creada::timestamptz, v.enviada::timestamptz, v.detalle
+INSERT INTO resultado_correccion (resultado_id, corregido_por, valor_anterior,
+                                  valor_nuevo, motivo, fecha_correccion)
+SELECT r.id, u.id, r.valor, 11.4, 'Error de transcripción al cargar el valor',
+       '2026-09-23 16:40-03'::timestamptz
+FROM resultado r
+JOIN orden_estudio oe ON oe.id = r.orden_estudio_id
+JOIN orden o          ON o.id = oe.orden_id
+JOIN analito a        ON a.id = r.analito_id
+JOIN usuario u        ON u.email = 'bioquimica@labresultados.test'
+WHERE o.codigo = 'LR-C82NTE' AND a.nombre = 'Hemoglobina';
+
+UPDATE resultado r
+SET valor = 11.4
+FROM orden_estudio oe, orden o, analito a
+WHERE oe.id = r.orden_estudio_id AND o.id = oe.orden_id AND a.id = r.analito_id
+  AND o.codigo = 'LR-C82NTE' AND a.nombre = 'Hemoglobina';
+
+-- ---------------------------------------------------------------------
+-- Enlaces de acceso al portal (tokens)
+-- Se guarda solo el hash SHA-256. María y Alex usaron su enlace para ver
+-- los resultados (por eso esas órdenes quedaron ENTREGADO por PORTAL).
+-- El de Juan venció sin usarse.
+-- ---------------------------------------------------------------------
+INSERT INTO token_acceso (paciente_id, token_hash, ip_solicitud,
+                          fecha_creacion, fecha_expiracion, fecha_uso)
+SELECT p.id, encode(sha256(convert_to(v.token, 'UTF8')), 'hex'), v.ip,
+       v.creado::timestamptz, v.creado::timestamptz + interval '15 minutes',
+       v.usado::timestamptz
 FROM (VALUES
-    ('LR-4F7K2Q', 'ENVIADA', '2025-09-16 17:30-03', '2025-09-16 17:31-03', NULL),
-    ('LR-9XH3MB', 'ENVIADA', '2026-03-11 16:20-03', '2026-03-11 16:21-03', NULL),
-    ('LR-C82NTE', 'ENVIADA', '2026-09-23 18:00-03', '2026-09-23 18:01-03', NULL),
-    ('LR-M2Z8RA', 'FALLIDA', '2026-09-19 15:10-03', NULL,                  'Buzón del destinatario lleno'),
-    ('LR-M2Z8RA', 'ENVIADA', '2026-09-19 18:10-03', '2026-09-19 18:11-03', 'Reintento')
-) AS v(codigo, estado, creada, enviada, detalle)
+    ('28456789', 'demo-token-maria', '190.210.10.5', '2025-09-18 10:02-03', '2025-09-18 10:04-03'),
+    ('40123456', 'demo-token-alex',  '186.22.41.17', '2026-09-21 10:55-03', '2026-09-21 10:58-03'),
+    ('33987654', 'demo-token-juan',  '181.47.22.9',  '2026-09-25 20:00-03', NULL)
+) AS v(dni, token, ip, creado, usado)
+JOIN paciente p ON p.dni = v.dni;
+
+-- ---------------------------------------------------------------------
+-- Notificaciones
+-- El aviso de Alex falló en el primer intento (buzón lleno) y salió en
+-- el reintento de la tarea programada.
+-- ---------------------------------------------------------------------
+INSERT INTO notificacion (orden_id, email_destino, estado, intentos, fecha_creacion,
+                          fecha_ultimo_intento, fecha_envio, detalle)
+SELECT o.id, p.email, v.estado, v.intentos, v.creada::timestamptz,
+       v.ultimo::timestamptz, v.enviada::timestamptz, v.detalle
+FROM (VALUES
+    ('LR-4F7K2Q', 'ENVIADA', 1, '2025-09-16 17:30-03', '2025-09-16 17:31-03', '2025-09-16 17:31-03', NULL),
+    ('LR-9XH3MB', 'ENVIADA', 1, '2026-03-11 16:20-03', '2026-03-11 16:21-03', '2026-03-11 16:21-03', NULL),
+    ('LR-C82NTE', 'ENVIADA', 1, '2026-09-23 18:00-03', '2026-09-23 18:01-03', '2026-09-23 18:01-03', NULL),
+    ('LR-M2Z8RA', 'ENVIADA', 2, '2026-09-19 15:10-03', '2026-09-19 15:20-03', '2026-09-19 15:20-03', 'Intento 1: buzón del destinatario lleno')
+) AS v(codigo, estado, intentos, creada, ultimo, enviada, detalle)
 JOIN orden o    ON o.codigo = v.codigo
 JOIN paciente p ON p.id = o.paciente_id;

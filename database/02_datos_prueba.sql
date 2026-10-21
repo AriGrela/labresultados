@@ -152,7 +152,7 @@ FROM (VALUES
     ('LR-4F7K2Q', 'Triglicéridos',     140, '2025-09-16 11:00-03'),
     ('LR-9XH3MB', 'Glucosa',           112, '2026-03-11 10:30-03'),
     ('LR-C82NTE', 'Glucosa',           126, '2026-09-23 12:15-03'),
-    ('LR-C82NTE', 'Hemoglobina',      11.4, '2026-09-23 12:15-03'),
+    ('LR-C82NTE', 'Hemoglobina',      11.2, '2026-09-23 12:15-03'),  -- se corrige abajo
     ('LR-C82NTE', 'Hematocrito',        37, '2026-09-23 12:15-03'),
     ('LR-C82NTE', 'Leucocitos',       7200, '2026-09-23 12:15-03'),
     ('LR-P5WQ7D', 'Creatinina',        1.1, '2026-09-26 09:40-03'),  -- falta la urea: sigue EN_PROCESO
@@ -168,6 +168,29 @@ LEFT JOIN rango_referencia rr
       AND (rr.sexo IS NULL OR rr.sexo = p.sexo)
       AND (rr.edad_min IS NULL OR extract(year FROM age(o.fecha_creacion, p.fecha_nacimiento)) >= rr.edad_min)
       AND (rr.edad_max IS NULL OR extract(year FROM age(o.fecha_creacion, p.fecha_nacimiento)) <= rr.edad_max);
+
+-- ---------------------------------------------------------------------
+-- Corrección de un resultado (queda auditada)
+-- La hemoglobina de María se cargó como 11.2 por un error de tipeo; la
+-- bioquímica la corrige a 11.4. El servicio hace las dos cosas juntas:
+-- registra la corrección y actualiza el valor.
+-- ---------------------------------------------------------------------
+INSERT INTO resultado_correccion (resultado_id, corregido_por, valor_anterior,
+                                  valor_nuevo, motivo, fecha_correccion)
+SELECT r.id, u.id, r.valor, 11.4, 'Error de transcripción al cargar el valor',
+       '2026-09-23 16:40-03'::timestamptz
+FROM resultado r
+JOIN orden_estudio oe ON oe.id = r.orden_estudio_id
+JOIN orden o          ON o.id = oe.orden_id
+JOIN analito a        ON a.id = r.analito_id
+JOIN usuario u        ON u.email = 'bioquimica@labresultados.test'
+WHERE o.codigo = 'LR-C82NTE' AND a.nombre = 'Hemoglobina';
+
+UPDATE resultado r
+SET valor = 11.4
+FROM orden_estudio oe, orden o, analito a
+WHERE oe.id = r.orden_estudio_id AND o.id = oe.orden_id AND a.id = r.analito_id
+  AND o.codigo = 'LR-C82NTE' AND a.nombre = 'Hemoglobina';
 
 -- ---------------------------------------------------------------------
 -- Notificaciones (una orden puede tener varios intentos de aviso)

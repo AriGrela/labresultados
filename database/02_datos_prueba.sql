@@ -194,6 +194,24 @@ WHERE oe.id = r.orden_estudio_id AND o.id = oe.orden_id AND a.id = r.analito_id
   AND o.codigo = 'LR-C82NTE' AND a.nombre = 'Hemoglobina';
 
 -- ---------------------------------------------------------------------
+-- Enlaces de acceso al portal (tokens)
+-- Se guarda solo el hash SHA-256. María y Alex usaron su enlace para ver
+-- los resultados (por eso esas órdenes quedaron ENTREGADO por PORTAL).
+-- El de Juan venció sin usarse.
+-- ---------------------------------------------------------------------
+INSERT INTO token_acceso (paciente_id, token_hash, ip_solicitud,
+                          fecha_creacion, fecha_expiracion, fecha_uso)
+SELECT p.id, encode(sha256(convert_to(v.token, 'UTF8')), 'hex'), v.ip,
+       v.creado::timestamptz, v.creado::timestamptz + interval '15 minutes',
+       v.usado::timestamptz
+FROM (VALUES
+    ('28456789', 'demo-token-maria', '190.210.10.5', '2025-09-18 10:02-03', '2025-09-18 10:04-03'),
+    ('40123456', 'demo-token-alex',  '186.22.41.17', '2026-09-21 10:55-03', '2026-09-21 10:58-03'),
+    ('33987654', 'demo-token-juan',  '181.47.22.9',  '2026-09-25 20:00-03', NULL)
+) AS v(dni, token, ip, creado, usado)
+JOIN paciente p ON p.dni = v.dni;
+
+-- ---------------------------------------------------------------------
 -- Notificaciones
 -- El aviso de Alex falló en el primer intento (buzón lleno) y salió en
 -- el reintento de la tarea programada.

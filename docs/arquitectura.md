@@ -58,8 +58,17 @@ flowchart TD
 | **Controller** | Recibe la petición HTTP, valida los datos de entrada y devuelve la respuesta en JSON. No contiene reglas de negocio. | `OrdenController` expone `POST /api/ordenes` |
 | **Service** | Contiene las **reglas de negocio** y coordina con otros módulos. | `ResultadoService` elige el rango de referencia según el sexo y la edad del paciente y, al completar la carga, pasa la orden a `LISTO` |
 | **Repository** | Accede a la base de datos con Spring Data JPA. | `OrdenRepository.findByCodigo(...)` |
-| **Entity** | Clases que representan las tablas (mapeo JPA). | `Orden`, `Resultado` |
-| **DTO** | Objetos que entran y salen por la API. Evitan exponer las entidades (por ejemplo, nunca se envía el `password_hash`). | `OrdenRequest`, `ResultadoResponse` |
+
+### Objetos que viajan entre las capas
+
+Las entidades y los DTO **no son capas**: son los objetos que las capas se pasan entre sí.
+
+| Objeto | Qué es | Entre qué capas viaja | Ejemplo |
+| --- | --- | --- | --- |
+| **Entity** | Clase que representa una tabla de la base (mapeo JPA). | Repository ↔ Service | `Orden`, `Resultado` |
+| **DTO** | Objeto con los datos que entran o salen por la API. Evita exponer las entidades: por ejemplo, nunca se envía el `password_hash`. | Frontend ↔ Controller ↔ Service | `OrdenRequest`, `ResultadoResponse` |
+
+El servicio es quien convierte entre unos y otros: recibe un DTO del controller, trabaja con entidades y devuelve un DTO.
 
 ### Paquetes: uno por módulo
 

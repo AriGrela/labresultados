@@ -194,16 +194,19 @@ WHERE oe.id = r.orden_estudio_id AND o.id = oe.orden_id AND a.id = r.analito_id
   AND o.codigo = 'LR-C82NTE' AND a.nombre = 'Hemoglobina';
 
 -- ---------------------------------------------------------------------
--- Notificaciones (una orden puede tener varios intentos de aviso)
+-- Notificaciones
+-- El aviso de Alex falló en el primer intento (buzón lleno) y salió en
+-- el reintento de la tarea programada.
 -- ---------------------------------------------------------------------
-INSERT INTO notificacion (orden_id, email_destino, estado, fecha_creacion, fecha_envio, detalle)
-SELECT o.id, p.email, v.estado, v.creada::timestamptz, v.enviada::timestamptz, v.detalle
+INSERT INTO notificacion (orden_id, email_destino, estado, intentos, fecha_creacion,
+                          fecha_ultimo_intento, fecha_envio, detalle)
+SELECT o.id, p.email, v.estado, v.intentos, v.creada::timestamptz,
+       v.ultimo::timestamptz, v.enviada::timestamptz, v.detalle
 FROM (VALUES
-    ('LR-4F7K2Q', 'ENVIADA', '2025-09-16 17:30-03', '2025-09-16 17:31-03', NULL),
-    ('LR-9XH3MB', 'ENVIADA', '2026-03-11 16:20-03', '2026-03-11 16:21-03', NULL),
-    ('LR-C82NTE', 'ENVIADA', '2026-09-23 18:00-03', '2026-09-23 18:01-03', NULL),
-    ('LR-M2Z8RA', 'FALLIDA', '2026-09-19 15:10-03', NULL,                  'Buzón del destinatario lleno'),
-    ('LR-M2Z8RA', 'ENVIADA', '2026-09-19 18:10-03', '2026-09-19 18:11-03', 'Reintento')
-) AS v(codigo, estado, creada, enviada, detalle)
+    ('LR-4F7K2Q', 'ENVIADA', 1, '2025-09-16 17:30-03', '2025-09-16 17:31-03', '2025-09-16 17:31-03', NULL),
+    ('LR-9XH3MB', 'ENVIADA', 1, '2026-03-11 16:20-03', '2026-03-11 16:21-03', '2026-03-11 16:21-03', NULL),
+    ('LR-C82NTE', 'ENVIADA', 1, '2026-09-23 18:00-03', '2026-09-23 18:01-03', '2026-09-23 18:01-03', NULL),
+    ('LR-M2Z8RA', 'ENVIADA', 2, '2026-09-19 15:10-03', '2026-09-19 15:20-03', '2026-09-19 15:20-03', 'Intento 1: buzón del destinatario lleno')
+) AS v(codigo, estado, intentos, creada, ultimo, enviada, detalle)
 JOIN orden o    ON o.codigo = v.codigo
 JOIN paciente p ON p.id = o.paciente_id;

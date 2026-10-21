@@ -261,9 +261,9 @@ frontend/
 | Módulo | Paquete backend | Pantallas frontend | Tablas |
 | --- | --- | --- | --- |
 | Gestión de usuarios y acceso | `usuarios` | `index.html`, `paciente/acceso.html`, `personal/login.html`, `personal/admin` | `usuario`, `rol`, `token_acceso` |
-| Gestión de pacientes | `pacientes` | `personal/recepcion` | `paciente`, `obra_social` |
-| Gestión de órdenes | `ordenes` | `personal/recepcion` | `orden`, `orden_estudio` |
-| Gestión de resultados | `resultados` | `personal/bioquimico` | `resultado` |
+| Gestión de pacientes | `pacientes` | `personal/recepcion` | `paciente` |
+| Gestión de órdenes | `ordenes` | `personal/recepcion` | `orden`, `orden_estudio`, `obra_social` |
+| Gestión de resultados | `resultados` | `personal/bioquimico` | `resultado`, `resultado_correccion` |
 | Consulta de resultados | `consulta` | `paciente/ordenes.html` | `vista_historial_resultados` |
 | Historial de resultados | `historial` | `paciente/historial.html` | `vista_historial_resultados` |
 | Notificaciones | `notificaciones` | — (lo dispara el sistema) | `notificacion` |

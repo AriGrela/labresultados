@@ -107,14 +107,13 @@ Permitir al personal de recepción registrar y consultar los datos necesarios de
 * Sexo.
 * Fecha de nacimiento.
 * Datos de contacto.
-* Obra social.
 * Órdenes asociadas.
 
 **Reglas de negocio:**
 
 * Un paciente puede tener una o más órdenes.
 * Los datos del paciente deben permitir identificarlo de forma inequívoca.
-* La obra social registrada en el paciente es su cobertura actual y no implica funcionalidades de facturación.
+* El email es necesario para recibir los avisos e ingresar al portal; si el paciente no tiene email, retira sus resultados en el mostrador.
 * El sexo y la fecha de nacimiento se utilizan para determinar el rango de referencia que corresponde a cada resultado.
 
 **Interacción con otros módulos:**
@@ -150,7 +149,7 @@ Permitir al personal de recepción registrar y gestionar las órdenes correspond
 * Registrar una nueva orden.
 * Asociar la orden a un paciente.
 * Registrar los estudios solicitados.
-* Registrar la obra social del paciente como dato asociado a la orden.
+* Registrar la obra social y el número de afiliado que el paciente presenta en esa visita (se puede precargar la de su última orden).
 * Generar un código de orden.
 * Consultar una orden.
 * Gestionar el estado de la orden.
@@ -161,7 +160,7 @@ Permitir al personal de recepción registrar y gestionar las órdenes correspond
 * Paciente.
 * Orden.
 * Estudio.
-* Obra social.
+* Obra social y número de afiliado.
 * Estado de la orden.
 * Fecha de la orden.
 * Medio de entrega (portal o mostrador).
@@ -170,7 +169,7 @@ Permitir al personal de recepción registrar y gestionar las órdenes correspond
 
 * Una orden debe estar asociada a un paciente.
 * Una orden debe contener uno o más estudios.
-* La obra social se registra solo como dato (sin facturación): el paciente guarda su cobertura actual y la orden conserva la cobertura utilizada en ese momento.
+* La obra social y el número de afiliado se registran solo en la orden, como dato (sin facturación): es la cobertura que el paciente presenta en esa visita.
 * La orden atraviesa los estados `En proceso → Listo → Entregado`:
   * **En proceso**: estado inicial, cuando la recepción registra la orden.
   * **Listo**: lo marca el bioquímico cuando termina de cargar todos los resultados.
@@ -202,7 +201,7 @@ Permitir al profesional del laboratorio cargar y gestionar los resultados corres
 
 **Entidades relacionadas:**
 
-* Orden, Estudio, Analito, Rango de referencia, Resultado.
+* Orden, Estudio, Analito, Rango de referencia, Resultado, Corrección de resultado.
 
 **Funcionalidades principales:**
 
@@ -213,6 +212,7 @@ Permitir al profesional del laboratorio cargar y gestionar los resultados corres
 * Consultar el rango de referencia del analito que corresponde al paciente (según su sexo y edad).
 * Identificar automáticamente valores fuera del rango de referencia.
 * Finalizar la carga de resultados.
+* Corregir un resultado ya cargado, indicando el motivo.
 * Actualizar el estado de la orden cuando los resultados estén disponibles.
 
 **Datos involucrados:**
@@ -225,6 +225,7 @@ Permitir al profesional del laboratorio cargar y gestionar los resultados corres
 * Unidad.
 * Rango de referencia.
 * Estado de la orden.
+* Corrección de resultado: valor anterior, valor nuevo, motivo, quién y cuándo.
 
 **Reglas de negocio:**
 
@@ -233,6 +234,7 @@ Permitir al profesional del laboratorio cargar y gestionar los resultados corres
 * Los valores deben compararse con el rango de referencia configurado para el analito.
 * Los valores fuera del rango de referencia deben ser identificados automáticamente.
 * Cuando los resultados estén disponibles, la orden puede pasar al estado `Listo`.
+* Toda corrección de un resultado ya cargado queda registrada con el valor anterior, el nuevo, el motivo, quién la hizo y cuándo.
 
 **Interacción con otros módulos:**
 
@@ -379,6 +381,8 @@ Informar al paciente cuando los resultados correspondientes a su orden se encuen
 * Obtener los datos de contacto del paciente.
 * Generar una notificación de disponibilidad.
 * Enviar la notificación mediante correo electrónico.
+* Reintentar automáticamente los envíos que fallan (hasta 3 intentos).
+* Mostrar a la recepción los avisos que no se pudieron enviar.
 
 **Datos involucrados:**
 
@@ -387,10 +391,12 @@ Informar al paciente cuando los resultados correspondientes a su orden se encuen
 * Estado de la orden.
 * Dirección de correo electrónico.
 * Fecha y hora de la notificación.
+* Estado del envío y cantidad de intentos.
 
 **Reglas de negocio:**
 
-* La notificación se genera cuando los resultados de una orden pasan a estar disponibles.
+* La notificación se genera cuando los resultados de una orden pasan a estar disponibles. No se envía en ese mismo momento: queda pendiente y la envía una tarea programada (ver [Arquitectura](arquitectura.md)).
+* Si el envío falla 3 veces, el aviso queda como fallido y la recepción avisa al paciente por otro medio.
 * La notificación se envía al correo electrónico registrado para el paciente.
 * La notificación debe informar al paciente que sus resultados están disponibles para ser consultados.
 

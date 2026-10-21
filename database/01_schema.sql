@@ -122,8 +122,15 @@ CREATE TABLE orden (
     fecha_creacion  TIMESTAMPTZ  NOT NULL DEFAULT now(),
     fecha_listo     TIMESTAMPTZ,                   -- cuándo pasó a LISTO
     fecha_entrega   TIMESTAMPTZ,                   -- cuándo pasó a ENTREGADO
+    -- PORTAL: el sistema la marca sola la primera vez que el paciente ve
+    -- sus resultados online. MOSTRADOR: la marca la recepción al entregarlos.
+    medio_entrega   VARCHAR(10),
     CONSTRAINT ck_orden_estado   CHECK (estado IN ('EN_PROCESO', 'LISTO', 'ENTREGADO')),
-    CONSTRAINT ck_orden_afiliado CHECK (obra_social_id IS NOT NULL OR nro_afiliado IS NULL)
+    CONSTRAINT ck_orden_afiliado CHECK (obra_social_id IS NOT NULL OR nro_afiliado IS NULL),
+    CONSTRAINT ck_orden_medio    CHECK (medio_entrega IS NULL OR medio_entrega IN ('PORTAL', 'MOSTRADOR')),
+    -- Coherencia entre el estado y sus fechas:
+    CONSTRAINT ck_orden_listo    CHECK ((estado = 'EN_PROCESO') = (fecha_listo IS NULL)),
+    CONSTRAINT ck_orden_entrega  CHECK ((estado = 'ENTREGADO') = (fecha_entrega IS NOT NULL AND medio_entrega IS NOT NULL))
 );
 
 -- Tabla intermedia: qué estudios se pidieron en cada orden.

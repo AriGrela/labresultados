@@ -100,19 +100,20 @@ JOIN analito a ON a.nombre = v.analito;
 -- adivinar: el paciente accede con código + DNI (protección de datos).
 -- ---------------------------------------------------------------------
 INSERT INTO orden (codigo, paciente_id, obra_social_id, nro_afiliado, creada_por, estado,
-                   fecha_creacion, fecha_listo, fecha_entrega)
+                   fecha_creacion, fecha_listo, fecha_entrega, medio_entrega)
 SELECT v.codigo, p.id, os.id, v.afiliado, u.id, v.estado,
-       v.creada::timestamptz, v.listo::timestamptz, v.entregada::timestamptz
+       v.creada::timestamptz, v.listo::timestamptz, v.entregada::timestamptz, v.medio
 FROM (VALUES
-    -- María: tres órdenes a lo largo de un año (sirven para ver su historial)
-    ('LR-4F7K2Q', '28456789', 'OSDE',          'OS-0417733',  'ENTREGADO',  '2025-09-15 08:10-03', '2025-09-16 17:30-03', '2025-09-18 10:05-03'),
-    ('LR-9XH3MB', '28456789', 'OSDE',          'OS-0417733',  'ENTREGADO',  '2026-03-10 07:45-03', '2026-03-11 16:20-03', '2026-03-12 09:40-03'),
-    ('LR-C82NTE', '28456789', 'Swiss Medical', 'SM-552310',   'LISTO',      '2026-09-22 08:05-03', '2026-09-23 18:00-03', NULL),
+    -- María: tres órdenes a lo largo de un año (sirven para ver su historial).
+    -- La primera la vio en el portal; la segunda la retiró en el mostrador.
+    ('LR-4F7K2Q', '28456789', 'OSDE',          'OS-0417733',  'ENTREGADO',  '2025-09-15 08:10-03', '2025-09-16 17:30-03', '2025-09-18 10:05-03', 'PORTAL'),
+    ('LR-9XH3MB', '28456789', 'OSDE',          'OS-0417733',  'ENTREGADO',  '2026-03-10 07:45-03', '2026-03-11 16:20-03', '2026-03-12 09:40-03', 'MOSTRADOR'),
+    ('LR-C82NTE', '28456789', 'Swiss Medical', 'SM-552310',   'LISTO',      '2026-09-22 08:05-03', '2026-09-23 18:00-03', NULL,                  NULL),
     -- Juan: orden del día, todavía en proceso (el paciente aún no ve resultados)
-    ('LR-P5WQ7D', '33987654', 'IOMA',          'IO-8831204',  'EN_PROCESO', '2026-09-25 07:30-03', NULL,                  NULL),
+    ('LR-P5WQ7D', '33987654', 'IOMA',          'IO-8831204',  'EN_PROCESO', '2026-09-25 07:30-03', NULL,                  NULL,                  NULL),
     -- Alex: particular, sin obra social
-    ('LR-M2Z8RA', '40123456', NULL,            NULL,          'ENTREGADO',  '2026-09-18 08:20-03', '2026-09-19 15:10-03', '2026-09-21 11:00-03')
-) AS v(codigo, dni, obra_social, afiliado, estado, creada, listo, entregada)
+    ('LR-M2Z8RA', '40123456', NULL,            NULL,          'ENTREGADO',  '2026-09-18 08:20-03', '2026-09-19 15:10-03', '2026-09-21 11:00-03', 'PORTAL')
+) AS v(codigo, dni, obra_social, afiliado, estado, creada, listo, entregada, medio)
 JOIN paciente p          ON p.dni = v.dni
 LEFT JOIN obra_social os ON os.nombre = v.obra_social
 JOIN usuario u           ON u.email = 'recepcion@labresultados.test';

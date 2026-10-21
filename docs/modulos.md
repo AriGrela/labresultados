@@ -130,6 +130,7 @@ Permitir al personal de recepción registrar y gestionar las órdenes correspond
 * Generar un código de orden.
 * Consultar una orden.
 * Gestionar el estado de la orden.
+* Registrar la entrega de los resultados en el mostrador.
 
 **Datos involucrados:**
 
@@ -139,13 +140,17 @@ Permitir al personal de recepción registrar y gestionar las órdenes correspond
 * Obra social.
 * Estado de la orden.
 * Fecha de la orden.
+* Medio de entrega (portal o mostrador).
 
 **Reglas de negocio:**
 
 * Una orden debe estar asociada a un paciente.
 * Una orden debe contener uno o más estudios.
 * La obra social se registra solo como dato (sin facturación): el paciente guarda su cobertura actual y la orden conserva la cobertura utilizada en ese momento.
-* La orden atraviesa los estados definidos por el sistema: `En proceso → Listo → Entregado`.
+* La orden atraviesa los estados `En proceso → Listo → Entregado`:
+  * **En proceso**: estado inicial, cuando la recepción registra la orden.
+  * **Listo**: lo marca el bioquímico cuando termina de cargar todos los resultados.
+  * **Entregado**: se marca **automáticamente** la primera vez que el paciente ve sus resultados en el portal (medio *portal*), o lo marca la **recepción** cuando los entrega en el mostrador (medio *mostrador*), lo que ocurra primero. Queda registrada la fecha y el medio de entrega.
 
 **Interacción con otros módulos:**
 
@@ -153,6 +158,7 @@ Permitir al personal de recepción registrar y gestionar las órdenes correspond
 * Se relaciona con **Administración de estudios** para seleccionar los estudios solicitados.
 * Se relaciona con **Gestión de resultados** para asociar los resultados correspondientes a los estudios de la orden.
 * Se relaciona con **Notificaciones** cuando la orden pasa al estado `Listo`.
+* Se relaciona con **Consulta de resultados**, que la marca como `Entregado` cuando el paciente ve sus resultados en el portal.
 
 **Resultado esperado:**
 Una orden correctamente registrada, asociada a un paciente y a los estudios solicitados, con un código que permita posteriormente consultar su estado y resultados.
@@ -249,13 +255,14 @@ Permitir al paciente consultar el estado de su orden y acceder a sus resultados 
 
 * El paciente únicamente debe poder acceder a la información correspondiente a su propia orden.
 * Los resultados deben estar disponibles para su consulta cuando la orden se encuentre en estado `Listo`.
+* La primera vez que el paciente ve los resultados de una orden en estado `Listo`, la orden pasa automáticamente a `Entregado` (medio portal).
 * Los valores fuera del rango de referencia deben visualizarse diferenciados.
 * Una orden que todavía se encuentre `En proceso` no debe mostrar resultados que aún no estén disponibles.
 
 **Interacción con otros módulos:**
 
 * Se relaciona con **Gestión de pacientes** para identificar al paciente.
-* Se relaciona con **Gestión de órdenes** para consultar el estado de la orden.
+* Se relaciona con **Gestión de órdenes** para consultar el estado de la orden y registrar su entrega por el portal.
 * Se relaciona con **Gestión de resultados** para obtener los resultados disponibles.
 * Se relaciona con **Historial de resultados** para consultar resultados anteriores.
 

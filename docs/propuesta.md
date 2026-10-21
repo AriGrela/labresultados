@@ -104,7 +104,7 @@ Un portal web donde:
 * La recepción **registra la orden** del paciente y sus estudios, generando un **código de orden**.
 * El bioquímico **carga los resultados** (valores por analito con su rango de referencia) y actualiza el **estado** de la orden.
 * El sistema **avisa por email** al pasar a "listo".
-* El paciente **consulta por código de orden / DNI** el estado y, cuando están listos, los resultados con **valores fuera de rango resaltados** y su **historial**.
+* El paciente **ingresa con un enlace temporal que recibe por email** (lo pide con su DNI y el código de su orden) y consulta el estado y, cuando están listos, los resultados con **valores fuera de rango resaltados** y su **historial**.
 
 ### 3.1 Stack tecnológico
 
@@ -144,7 +144,7 @@ Permitirá:
 * Registro de órdenes (paciente + estudios pedidos + obra social como dato).
 * Carga de resultados estructurados: Analito (componente), valor, unidad, rango de referencia.
 * Estados de la orden: en proceso → listo → entregado.
-* Consulta del paciente por código de orden / DNI.
+* Acceso del paciente con un enlace temporal por email (lo pide con su DNI y el código de su orden).
 * Resaltado automático de valores fuera de rango.
 * Historial de resultados por paciente, con la evolución de cada analito en el tiempo.
 * Aviso por email cuando los resultados pasan a "listo".
@@ -177,7 +177,7 @@ En caso de que se disponga de tiempo, se contempla agregar las siguientes funcio
 * Mejorar la calidad del servicio al paciente, que podrá visualizar sus resultados sin requerir comunicación directa con el laboratorio.
 
 **Objetivos específicos de la aplicación (producto)** — vinculados a los criterios de éxito:
-* Permitir al paciente consultar el estado de su orden y sus resultados por código de orden / DNI, sin intervención del laboratorio.
+* Permitir al paciente consultar el estado de su orden y sus resultados ingresando con un enlace temporal por email, sin intervención del laboratorio.
 * Permitir al laboratorio registrar órdenes y cargar resultados estructurados de punta a punta.
 * Resaltar automáticamente los valores fuera del rango de referencia.
 * Notificar por email al paciente cuando sus resultados están disponibles.

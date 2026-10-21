@@ -41,7 +41,7 @@ En paralelo, desde la perspectiva del paciente, la calidad de servicio que recib
 1. La **recepción** registra las órdenes de los pacientes.
 2. El **bioquímico** carga los resultados y actualiza el estado de los estudios.
 3. Cuando los resultados están disponibles, el paciente recibe una **notificación por correo electrónico**.
-4. El **paciente** consulta el estado de su orden y accede a sus resultados mediante un código de orden o DNI.
+4. El **paciente** ingresa con un enlace temporal que recibe por email (lo pide con su DNI y el código de su orden) y consulta el estado de sus órdenes y sus resultados.
 
 
 ## 📍 Alcance

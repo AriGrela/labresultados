@@ -102,9 +102,17 @@ Cada paquete repite la misma estructura interna que `usuarios/` (controller, ser
 
 ## 4. Seguridad: autenticación y autorización
 
+- **Autenticación**: comprobar *quién es* el usuario (inicio de sesión del personal o enlace del paciente).
+- **Autorización**: decidir *qué puede hacer* según su rol y, en el caso del paciente, sobre qué datos (solo los propios).
+
+Ambas se implementan con **Spring Security**.
+
 ### 4.1 Personal del laboratorio
 
-Inicio de sesión con email y contraseña (guardada como hash BCrypt) con Spring Security. Cada endpoint se habilita según el rol: `ADMINISTRADOR`, `RECEPCION` o `BIOQUIMICO`.
+- Inicia sesión con **email y contraseña**. La contraseña se guarda como hash BCrypt, nunca en texto plano.
+- Si los datos son correctos, el backend entrega un **token JWT firmado** con el id y el rol del usuario, que vence a las **8 horas** (una jornada). El frontend lo envía en cada pedido, en el encabezado `Authorization`.
+- Elegimos JWT en lugar de una sesión con cookie porque el frontend y el backend se despliegan en dominios distintos (Vercel y Render), donde las cookies entre sitios complican la configuración.
+- Un usuario dado de baja (`activo = false`) no puede iniciar sesión.
 
 ### 4.2 Paciente: enlace de acceso temporal por email
 
@@ -151,6 +159,36 @@ Requisito: el paciente tiene que tener un email registrado. Si no tiene, retira 
 **Justificación:** el código de orden ya no es la llave de acceso; solo sirve para *pedir* el enlace. Lo que identifica al paciente es haber abierto el enlace que llegó a **su propio email**, por eso la sesión representa al paciente y no a una orden. Ver el historial completo es lo que permite comparar con resultados anteriores, que es parte central de la propuesta.
 
 El paciente nunca puede ver datos de otro: el backend toma su `paciente_id` de la sesión y filtra todas las consultas por él. No usa identificadores que mande el frontend.
+
+### 4.4 Autorización por roles (RBAC)
+
+Cada endpoint de la API tiene definidos los roles que pueden usarlo. Se aplica el principio de **mínimo privilegio**: cada rol accede solo a lo que necesita para su tarea. Además del rol, el paciente solo accede a **sus propios datos** (ver 4.3).
+
+| Endpoint | Descripción | Roles con acceso | Justificación |
+| --- | --- | --- | --- |
+| `POST /api/auth/login` | Inicio de sesión del personal | Público | Es la puerta de entrada; devuelve el JWT. |
+| `PUT /api/usuarios/me/password` | Cambiar la propia contraseña | Administrador, Recepción, Bioquímico | Cada usuario administra su propia credencial. |
+| `GET /api/usuarios` | Listar el personal | Administrador | Solo el administrador gestiona usuarios. |
+| `POST /api/usuarios` | Alta de un usuario y asignación de rol | Administrador | Evita que alguien se otorgue permisos a sí mismo. |
+| `PUT /api/usuarios/{id}` | Modificar datos, rol o dar de baja | Administrador | Ídem anterior. |
+| `POST /api/portal/acceso` | Pedir el enlace de acceso (DNI + código de orden) | Público | Responde siempre el mismo mensaje y limita la cantidad de pedidos. |
+| `POST /api/portal/sesion` | Canjear el token del enlace por una sesión | Público, con token válido | El token de un solo uso es la prueba de identidad del paciente. |
+| `GET /api/pacientes?dni=` | Buscar un paciente | Recepción, Bioquímico | Recepción lo necesita para registrar órdenes; el bioquímico, para conocer sexo y edad al interpretar. |
+| `POST /api/pacientes` | Alta de un paciente | Recepción | Los datos personales los carga quien atiende en el mostrador. |
+| `PUT /api/pacientes/{id}` | Modificar los datos de un paciente | Recepción | Ídem anterior. |
+| `GET /api/estudios` | Ver estudios, analitos y rangos de referencia | Administrador, Recepción, Bioquímico | Recepción elige los estudios de la orden; el bioquímico consulta los rangos. |
+| `POST /api/estudios`, `PUT /api/estudios/{id}` | Configurar estudios, analitos y rangos | Administrador | Un cambio de rango afecta cómo se interpretan los resultados. |
+| `POST /api/ordenes` | Registrar una orden | Recepción | Es una tarea del mostrador. |
+| `GET /api/ordenes?estado=` | Listar órdenes por estado | Recepción, Bioquímico | Recepción sigue el estado; el bioquímico ve las pendientes de carga. |
+| `PATCH /api/ordenes/{id}/entrega` | Marcar como entregada en el mostrador | Recepción | Quien entrega en persona deja el registro (medio `MOSTRADOR`). |
+| `POST /api/ordenes/{id}/resultados` | Cargar los resultados de una orden | Bioquímico | Solo un profesional carga datos clínicos. |
+| `PUT /api/resultados/{id}` | Corregir un resultado (con motivo) | Bioquímico | Ídem anterior; la corrección queda auditada. |
+| `PATCH /api/ordenes/{id}/listo` | Cerrar la carga y pasar la orden a `LISTO` | Bioquímico | Es quien libera los resultados para el paciente. |
+| `GET /api/notificaciones?estado=FALLIDA` | Ver los avisos que no se pudieron enviar | Recepción | Para avisar al paciente por otro medio. |
+| `GET /api/portal/ordenes` | Ver sus órdenes, estados y resultados | Paciente (solo las propias) | Se filtra por el paciente de la sesión. |
+| `GET /api/portal/historial?analito=` | Ver la evolución de un analito | Paciente (solo el propio) | Ídem anterior. |
+
+Si alguien llama a un endpoint sin sesión, la API responde `401 No autenticado`; si tiene sesión pero no el rol necesario, `403 Prohibido`.
 
 ## 5. Organización del frontend
 

@@ -21,6 +21,8 @@
 - **Actores secundarios:** otros usuarios que usan alguna funcionalidad del módulo o reciben su resultado, sin ser su destinatario principal.
 - **Entidades relacionadas:** los datos del sistema (tablas de la base de datos) con los que trabaja el módulo. No son personas.
 
+En el diagrama, cada flecha que sale de un actor llega a los módulos de los que es **actor principal**. La flecha gruesa indica que **todos** los actores ingresan al sistema por **Gestión de usuarios y acceso**. Las flechas entre módulos muestran cómo pasa la información de uno a otro.
+
 ---
 
 ### Gestión de usuarios y acceso

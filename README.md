@@ -1,9 +1,9 @@
 <p align=center>
-<img src="./docs/images/logo-light.jpg" width=600>
+<img src="./docs/images/logo-light.jpg" alt="Logo de LabResultados" width=600>
 </p>
 <p align=center> <strong>Portal de resultados y seguimiento de órdenes para laboratorios de análisis clínicos</strong> </p>
 
-<p align=center> <a href="docs/propuesta.md"> Propuesta de Proyecto</a> • <a href="docs/modulos.md">Listado de Módulos</a> • <a href="database/diagrama-er.md">Base de Datos</a> • <a href="docs/arquitectura.md">Arquitectura</a> • <a href="#créditos"> Créditos </p>
+<p align=center> <a href="docs/propuesta.md"> Propuesta de Proyecto</a> • <a href="docs/modulos.md">Listado de Módulos</a> • <a href="database/diagrama-er.md">Base de Datos</a> • <a href="docs/arquitectura.md">Arquitectura</a> • <a href="#creditos"> Créditos </a> </p>
 
 <p align=center> <a href="https://www.utn.edu.ar" >
     <img src="https://img.shields.io/badge/UTN-Universidad%20Tecnológica%20Nacional-0056b3?style=for-the-badge" alt="Universidad Tecnológica Nacional" >
@@ -33,7 +33,7 @@ En paralelo, desde la perspectiva del paciente, la calidad de servicio que recib
 ## 💡 Solución
 
 <p align=center>
-<img src="./docs/images/solucion.png" height=250>
+<img src="./docs/images/solucion.png" alt="Infograma de solucion" height=250>
 </p>
 
 **LabResultados** propone un portal web que centraliza la gestión y consulta de los estudios:
@@ -84,11 +84,12 @@ El sistema contempla:
 ## 🗓️ Plan de trabajo
 
 Desarrollar un MVP funcional de portal de resultados y seguimiento de órdenes, desplegado online, en 3 etapas:
+
 | Etapa | Fecha máxima | Entregable |
-|---|---|---|
-| 1.ª Entrega | 30/08 | Propuesta + plan de trabajo + URL del repositorio |
-| 2.ª Entrega | 27/09 | Esquema de base de datos + listado de módulos |
-| Entrega Final | 14/11 | Repo completo, despliegue online, informe y video |
+|---|--------------|---|
+| 1.ª Entrega | 30/08        | Propuesta + plan de trabajo + URL del repositorio |
+| 2.ª Entrega | 27/09        | Esquema de base de datos + listado de módulos |
+| Entrega Final | A definir    | Repo completo, despliegue online, informe y video |
 
 ## 📖 Documentación
 
@@ -104,7 +105,7 @@ labresultados/
 └── README.md
 ```
 
-## Créditos
+## Creditos
 **Grupo 111:** [Ariel Grela](https://github.com/AriGrela) • [Matías N. Higa](https://github.com/emegiga) 
 
 **Tutor:** Fonzo, Santiago

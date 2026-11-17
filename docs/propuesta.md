@@ -184,11 +184,11 @@ En caso de que se disponga de tiempo, se contempla agregar las siguientes funcio
 
 **Entregables por etapa:**
 
-| Etapa         | Fecha máxima                | Entregable                                        |
-| ------------- | --------------------------- | ------------------------------------------------- |
-| 1.ª Entrega   | 30/08                       | Propuesta + plan de trabajo + URL del repositorio |
-| 2.ª Entrega   | 27/09                       | Esquema de base de datos + listado de módulos     |
-| Entrega Final | 14/11 (cursado hasta 21/11) | Repo completo, despliegue online, informe y video |
+| Etapa         | Fecha máxima | Entregable                                        |
+| ------------- |--------------| ------------------------------------------------- |
+| 1.ª Entrega   | 30/08        | Propuesta + plan de trabajo + URL del repositorio |
+| 2.ª Entrega   | 27/09        | Esquema de base de datos + listado de módulos     |
+| Entrega Final | A definir    | Repo completo, despliegue online, informe y video |
 
 **Riesgos y mitigaciones:**
 
